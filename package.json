@@ -1,0 +1,8 @@
+{
+  "name": "manofox-seo-hub",
+  "version": "3.0.0",
+  "description": "Manofox SEO Hub — Vercel Serverless",
+  "dependencies": {
+    "mongoose": "^8.0.0"
+  }
+}

@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manofox SEO Hub</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0f;color:#e8e8f0;font-family:'Segoe UI',sans-serif;min-height:100vh}
+a{color:inherit;text-decoration:none}
+.hdr{display:flex;justify-content:space-between;align-items:center;padding:16px 32px;border-bottom:1px solid #1e1e2a;background:#0a0a0f;position:sticky;top:0;z-index:99}
+.logo{font-weight:800;font-size:1.2rem}.logo span{color:#ff5c00}
+.btn{padding:7px 16px;border-radius:6px;border:none;cursor:pointer;font-size:0.82rem;font-weight:600;display:inline-block;transition:0.2s;text-decoration:none}
+.btn-o{background:#ff5c00;color:#fff}.btn-o:hover{background:#ff9a3c}
+.btn-g{background:transparent;border:1px solid #1e1e2a;color:#6b6b7e}.btn-g:hover{border-color:#ff5c00;color:#e8e8f0}
+.btn-green{background:rgba(0,232,143,0.1);color:#00e88f;border:1px solid rgba(0,232,143,0.3)}
+.btn-red{background:rgba(239,68,68,0.1);color:#ef4444;border:1px solid rgba(239,68,68,0.2)}
+.main{padding:32px}
+/* Login */
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0a0a0f}
+.login-box{background:#111118;border:1px solid #1e1e2a;border-radius:16px;padding:40px;width:380px;text-align:center}
+.login-box h2{font-size:1.5rem;margin-bottom:8px}.login-box p{color:#6b6b7e;font-size:0.85rem;margin-bottom:28px}
+.login-box input{width:100%;padding:12px 16px;background:#0a0a0f;border:1px solid #1e1e2a;border-radius:8px;color:#e8e8f0;font-size:0.9rem;margin-bottom:14px;outline:none}
+.login-box input:focus{border-color:#ff5c00}
+.err{color:#ef4444;font-size:0.82rem;margin-bottom:12px}
+/* Dashboard */
+#dashboard-screen{display:none}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.stat-card{background:#111118;border:1px solid #1e1e2a;border-radius:12px;padding:20px}
+.stat-label{font-size:0.72rem;color:#6b6b7e;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.stat-value{font-size:1.8rem;font-weight:800;color:#e8e8f0}
+.stat-sub{font-size:0.75rem;color:#6b6b7e;margin-top:4px}
+.site-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.site-card{background:#111118;border:1px solid #1e1e2a;border-radius:12px;padding:20px;cursor:pointer;transition:0.2s}
+.site-card:hover{border-color:#ff5c00}
+.site-name{font-size:1rem;font-weight:700;margin-bottom:4px}
+.site-domain{font-size:0.78rem;color:#6b6b7e;margin-bottom:12px}
+.site-badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:0.7rem;font-weight:700;background:rgba(255,92,0,0.12);color:#ff9a3c;border:1px solid rgba(255,92,0,0.2)}
+/* Site Detail */
+#site-screen{display:none}
+.bread{font-size:0.78rem;color:#6b6b7e;margin-bottom:18px;cursor:pointer}.bread:hover{color:#ff5c00}
+.page-title{font-size:1.8rem;font-weight:800;margin-bottom:4px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid #1e1e2a;margin-bottom:24px;overflow-x:auto}
+.tab{padding:10px 18px;cursor:pointer;border:none;background:transparent;color:#6b6b7e;font-size:0.85rem;font-weight:600;border-bottom:2px solid transparent;white-space:nowrap;transition:0.2s}
+.tab.active{color:#e8e8f0;border-bottom-color:#ff5c00}
+.tab-pane{display:none}.tab-pane.active{display:block}
+.card{background:#111118;border:1px solid #1e1e2a;border-radius:12px;padding:20px;margin-bottom:16px}
+.card-title{font-size:0.72rem;color:#6b6b7e;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px}
+label{display:block;font-size:0.78rem;color:#6b6b7e;margin-bottom:6px;font-weight:600}
+input[type=text],input[type=password],textarea,select{width:100%;padding:10px 14px;background:#0a0a0f;border:1px solid #1e1e2a;border-radius:8px;color:#e8e8f0;font-size:0.85rem;margin-bottom:14px;outline:none;font-family:inherit}
+input:focus,textarea:focus,select:focus{border-color:#ff5c00}
+textarea{resize:vertical;min-height:80px}
+.kw-box{background:#0a0a0f;border:1px solid rgba(0,232,143,0.3);border-radius:8px;padding:12px;font-size:0.78rem;color:#00e88f;line-height:1.6;margin-bottom:14px}
+.kw-fixed{color:#6b9fff;font-size:0.72rem;margin-bottom:6px}
+.kw-trending{color:#00e88f;font-size:0.72rem}
+.pg-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.pg-tab{padding:6px 14px;border-radius:6px;border:1px solid #1e1e2a;background:transparent;color:#6b6b7e;cursor:pointer;font-size:0.78rem;font-weight:600;transition:0.2s}
+.pg-tab.active{background:#ff5c00;color:#fff;border-color:#ff5c00}
+.page-ed{display:none}.page-ed.active{display:block}
+.analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.num{text-align:right;color:#ff9a3c;font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:0.82rem}
+th{text-align:left;padding:8px;color:#6b6b7e;font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #1e1e2a}
+td{padding:8px;border-bottom:1px solid #0f0f18}
+.day-btn{font-size:0.75rem;padding:5px 12px;border-radius:6px;border:1px solid #1e1e2a;background:transparent;color:#6b6b7e;cursor:pointer;margin-right:6px;transition:0.2s}
+.day-btn.active,.day-btn:hover{background:#ff5c00;color:#fff;border-color:#ff5c00}
+.src-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:0.68rem;font-weight:700}
+.src-google-trends{background:rgba(0,232,143,0.1);color:#00e88f}
+.src-fallback{background:rgba(255,200,0,0.1);color:#ffc800}
+.install-tab pre{background:#0a0a0f;border:1px solid #1e1e2a;border-radius:8px;padding:14px;font-size:0.75rem;color:#e8e8f0;overflow-x:auto;white-space:pre;font-family:monospace;margin-bottom:8px}
+.copy-btn{font-size:0.72rem;padding:4px 10px;border-radius:4px;border:1px solid #1e1e2a;background:transparent;color:#6b6b7e;cursor:pointer;margin-bottom:14px;float:right}
+.copy-btn:hover{border-color:#ff5c00;color:#ff5c00}
+.danger{background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.2);border-radius:12px;padding:20px;margin-top:16px}
+.danger-title{font-size:0.85rem;font-weight:700;color:#ef4444;margin-bottom:8px}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:center;justify-content:center}
+.modal.open{display:flex}
+.modal-box{background:#111118;border:1px solid #1e1e2a;border-radius:16px;padding:32px;width:460px;max-width:95vw}
+.modal-box h3{margin-bottom:20px;font-size:1.1rem}
+.toast{position:fixed;bottom:24px;right:24px;background:#00e88f;color:#0a0a0f;padding:10px 20px;border-radius:8px;font-weight:700;font-size:0.85rem;z-index:999;display:none}
+@media(max-width:768px){.stat-grid{grid-template-columns:1fr 1fr}.analytics-grid{grid-template-columns:1fr}.main{padding:16px}.hdr{padding:12px 16px}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div style="font-size:2rem;margin-bottom:12px">🦊</div>
+    <h2><span style="color:#ff5c00">Mano</span>fox SEO Hub</h2>
+    <p>Manage SEO for all your sites</p>
+    <div id="login-err" class="err" style="display:none"></div>
+    <input type="password" id="pw-input" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn btn-o" style="width:100%;padding:12px" onclick="doLogin()">Login →</button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard-screen">
+  <div class="hdr">
+    <div class="logo"><span>Mano</span>fox<span style="color:#6b6b7e;font-weight:400;font-size:0.9rem"> SEO Hub</span></div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <button class="btn btn-o" onclick="showNewSiteModal()">+ New Site</button>
+      <button class="btn btn-g" onclick="doForceAll()">⚡ Update All</button>
+      <button class="btn btn-g" onclick="doLogout()">Logout</button>
+    </div>
+  </div>
+  <div class="main">
+    <div class="stat-grid" id="dash-stats"></div>
+    <div style="margin-bottom:16px;font-size:0.85rem;color:#6b6b7e">YOUR SITES</div>
+    <div class="site-grid" id="site-grid"></div>
+  </div>
+</div>
+
+<!-- SITE DETAIL -->
+<div id="site-screen">
+  <div class="hdr">
+    <div class="logo"><span>Mano</span>fox<span style="color:#6b6b7e;font-weight:400;font-size:0.9rem"> SEO Hub</span></div>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-o" id="force-btn" onclick="forceUpdate()">⚡ Update</button>
+      <button class="btn btn-o" onclick="showNewSiteModal()">+ New Site</button>
+      <button class="btn btn-g" onclick="showDashboard()">← Back</button>
+    </div>
+  </div>
+  <div class="main">
+    <div class="bread" onclick="showDashboard()">← Dashboard</div>
+    <div class="page-title" id="site-title"></div>
+    <div style="font-size:0.82rem;color:#6b6b7e;margin-bottom:20px" id="site-sub"></div>
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('analytics',this)">📊 Analytics</button>
+      <button class="tab" onclick="switchTab('seo',this)">✏️ SEO Editor</button>
+      <button class="tab" onclick="switchTab('install',this)">📦 Install</button>
+      <button class="tab" onclick="switchTab('history',this)">📋 History</button>
+      <button class="tab" onclick="switchTab('settings',this)">⚙️ Settings</button>
+    </div>
+
+    <!-- ANALYTICS TAB -->
+    <div class="tab-pane active" id="tab-analytics">
+      <div class="stat-grid" id="site-stats"></div>
+      <div class="analytics-grid">
+        <div class="card">
+          <div class="card-title">Traffic Trend</div>
+          <canvas id="traffic-chart" height="120"></canvas>
+        </div>
+        <div class="card">
+          <div class="card-title">Devices</div>
+          <canvas id="device-chart" height="120"></canvas>
+        </div>
+      </div>
+      <div class="analytics-grid">
+        <div class="card">
+          <div class="card-title">Top Referrers</div>
+          <table><thead><tr><th>Source</th><th class="num">Visits</th></tr></thead>
+          <tbody id="referrer-table"></tbody></table>
+        </div>
+        <div class="card">
+          <div class="card-title">Top Pages</div>
+          <table><thead><tr><th>Page</th><th class="num">Visits</th></tr></thead>
+          <tbody id="page-table"></tbody></table>
+        </div>
+      </div>
+      <div style="margin-bottom:12px">
+        <button class="day-btn active" onclick="loadSite(curSite,7,this)">7d</button>
+        <button class="day-btn" onclick="loadSite(curSite,30,this)">30d</button>
+        <button class="day-btn" onclick="loadSite(curSite,90,this)">90d</button>
+      </div>
+    </div>
+
+    <!-- SEO EDITOR TAB -->
+    <div class="tab-pane" id="tab-seo">
+      <div class="pg-tabs" id="page-tabs"></div>
+      <div id="page-editors"></div>
+      <div class="card" style="margin-top:16px">
+        <div class="card-title">Add New Page</div>
+        <div style="display:flex;gap:10px">
+          <input type="text" id="new-page-input" placeholder="e.g. about, services, blog" style="margin-bottom:0">
+          <button class="btn btn-o" onclick="addPage()">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- INSTALL TAB -->
+    <div class="tab-pane install-tab" id="tab-install">
+      <div class="card">
+        <div class="card-title">🌐 HTML / Static Site</div>
+        <button class="copy-btn" onclick="copyCode('c-html')">Copy</button>
+        <pre id="c-html"></pre>
+      </div>
+      <div class="card">
+        <div class="card-title">🟢 Node.js / Express</div>
+        <button class="copy-btn" onclick="copyCode('c-helper')">Copy</button>
+        <pre id="c-helper"></pre>
+        <button class="copy-btn" onclick="copyCode('c-routes')">Copy Routes</button>
+        <pre id="c-routes"></pre>
+      </div>
+      <div class="card">
+        <div class="card-title">🐘 PHP</div>
+        <button class="copy-btn" onclick="copyCode('c-php')">Copy</button>
+        <pre id="c-php"></pre>
+      </div>
+      <div class="card">
+        <div class="card-title">⚛️ WordPress (functions.php)</div>
+        <button class="copy-btn" onclick="copyCode('c-wp')">Copy</button>
+        <pre id="c-wp"></pre>
+      </div>
+      <div class="card">
+        <div class="card-title">▲ Next.js</div>
+        <button class="copy-btn" onclick="copyCode('c-next')">Copy</button>
+        <pre id="c-next"></pre>
+      </div>
+    </div>
+
+    <!-- HISTORY TAB -->
+    <div class="tab-pane" id="tab-history">
+      <div class="card">
+        <div class="card-title">Keyword Update History</div>
+        <div id="kw-history"></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS TAB -->
+    <div class="tab-pane" id="tab-settings">
+      <div class="card">
+        <div class="card-title">Site Settings</div>
+        <form onsubmit="saveSettings(event)">
+          <label>Site Name</label><input type="text" id="set-name">
+          <label>Domain</label><input type="text" id="set-domain">
+          <label>Category</label>
+          <select id="set-category">
+            <option>education</option><option>ecommerce</option><option>technology</option>
+            <option>healthcare</option><option>digitalmarketing</option><option>restaurant</option>
+            <option>realestate</option><option>default</option>
+          </select>
+          <button class="btn btn-o" type="submit">💾 Save Settings</button>
+        </form>
+      </div>
+      <div class="danger">
+        <div class="danger-title">⚠️ Danger Zone</div>
+        <div style="font-size:0.83rem;color:#6b6b7e;margin-bottom:14px">Permanently deletes all data for this site.</div>
+        <button class="btn btn-red" onclick="deleteSite()">🗑️ Delete Site</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NEW SITE MODAL -->
+<div class="modal" id="new-site-modal">
+  <div class="modal-box">
+    <h3>+ Add New Site</h3>
+    <label>Site Name</label><input type="text" id="ns-name" placeholder="Agrim Classes">
+    <label>Domain</label><input type="text" id="ns-domain" placeholder="agrimclasses.in">
+    <label>Category</label>
+    <select id="ns-category">
+      <option>education</option><option>ecommerce</option><option>technology</option>
+      <option>healthcare</option><option>digitalmarketing</option><option>restaurant</option>
+      <option>realestate</option><option>default</option>
+    </select>
+    <div id="ns-err" class="err" style="display:none"></div>
+    <div style="display:flex;gap:10px;margin-top:8px">
+      <button class="btn btn-o" style="flex:1" onclick="createSite()">Create Site</button>
+      <button class="btn btn-g" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── STATE ────────────────────────────────────────────────────────────────────
+var curSite = null;
+var siteData = null;
+var trafficChart = null;
+var deviceChart  = null;
+
+// ─── AUTH ─────────────────────────────────────────────────────────────────────
+async function doLogin() {
+    var pw = document.getElementById('pw-input').value;
+    var r  = await fetch('/api/auth', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({password: pw}), credentials:'include' });
+    if (r.ok) { showDashboard(); loadDashboard(); }
+    else { var e = document.getElementById('login-err'); e.style.display='block'; e.textContent='Wrong password'; }
+}
+function doLogout() {
+    fetch('/api/auth', {method:'DELETE', credentials:'include'});
+    document.getElementById('dashboard-screen').style.display='none';
+    document.getElementById('login-screen').style.display='flex';
+}
+
+// ─── SCREENS ──────────────────────────────────────────────────────────────────
+function showDashboard() {
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('dashboard-screen').style.display='block';
+    document.getElementById('site-screen').style.display='none';
+    loadDashboard();
+}
+function showSite(siteId) {
+    curSite = siteId;
+    document.getElementById('dashboard-screen').style.display='none';
+    document.getElementById('site-screen').style.display='block';
+    loadSite(siteId, 7);
+}
+
+// ─── DASHBOARD ────────────────────────────────────────────────────────────────
+async function loadDashboard() {
+    var r = await fetch('/api/dashboard?action=sites', {credentials:'include'});
+    if (!r.ok) { document.getElementById('login-screen').style.display='flex'; document.getElementById('dashboard-screen').style.display='none'; return; }
+    var d = await r.json();
+    document.getElementById('dash-stats').innerHTML =
+        statCard('Total Sites', d.sites.length, 'Active sites') +
+        statCard('Visits (7d)', d.totalVisits, 'Across all sites') +
+        statCard('Auto Sites', d.sites.filter(s=>s.autoRegistered).length, 'Auto-registered') +
+        statCard('Pages', d.sites.reduce((a,s)=>a+(s.seoData?1:0),0), 'With SEO data');
+    document.getElementById('site-grid').innerHTML = d.sites.map(s =>
+        '<div class="site-card" onclick="showSite(\''+s.siteId+'\')">' +
+        '<div class="site-name">'+s.name+'</div>' +
+        '<div class="site-domain">'+( s.domain||'No domain')+'</div>' +
+        '<div style="display:flex;justify-content:space-between;align-items:center">' +
+        '<span class="site-badge">'+s.category+'</span>' +
+        '<span style="font-size:0.75rem;color:#6b6b7e">'+s.visits7d+' visits</span></div></div>'
+    ).join('');
+}
+function statCard(label,val,sub){return '<div class="stat-card"><div class="stat-label">'+label+'</div><div class="stat-value">'+val+'</div><div class="stat-sub">'+sub+'</div></div>'}
+
+// ─── SITE DETAIL ──────────────────────────────────────────────────────────────
+async function loadSite(siteId, days, dayBtn) {
+    if (dayBtn) { document.querySelectorAll('.day-btn').forEach(b=>b.classList.remove('active')); dayBtn.classList.add('active'); }
+    var r = await fetch('/api/dashboard?action=site&siteId='+siteId+'&days='+(days||7), {credentials:'include'});
+    var d = await r.json();
+    siteData = d;
+
+    document.getElementById('site-title').textContent = d.site.name;
+    document.getElementById('site-sub').innerHTML = '🌐 <span style="color:#ff9a3c">'+( d.site.domain||'No domain')+'</span> &nbsp;·&nbsp; Category: <span style="color:#ff9a3c">'+d.site.category+'</span>';
+
+    // Stats
+    var mobile = d.deviceStats.find(x=>x._id==='Mobile')?.count||0;
+    var desktop= d.deviceStats.find(x=>x._id==='Desktop')?.count||0;
+    document.getElementById('site-stats').innerHTML =
+        statCard('Total Visits', d.totalVisits, days+'d period') +
+        statCard('Mobile', mobile, 'Mobile visits') +
+        statCard('Desktop', desktop, 'Desktop visits') +
+        statCard('Pages', d.seoPages.length, 'SEO pages');
+
+    // Charts
+    if (trafficChart) trafficChart.destroy();
+    if (deviceChart)  deviceChart.destroy();
+    trafficChart = new Chart(document.getElementById('traffic-chart'), {
+        type:'line', data:{ labels: d.dailyStats.map(x=>x._id), datasets:[{label:'Visits', data:d.dailyStats.map(x=>x.count), borderColor:'#ff5c00', tension:0.4, fill:true, backgroundColor:'rgba(255,92,0,0.1)'}] },
+        options:{ plugins:{legend:{display:false}}, scales:{ x:{ticks:{color:'#6b6b7e',font:{size:10}}}, y:{ticks:{color:'#6b6b7e',font:{size:10}}} } }
+    });
+    var devLabels = d.deviceStats.map(x=>x._id||'Unknown');
+    var devData   = d.deviceStats.map(x=>x.count);
+    deviceChart = new Chart(document.getElementById('device-chart'), {
+        type:'doughnut', data:{ labels:devLabels, datasets:[{data:devData, backgroundColor:['#ff5c00','#ff9a3c','#ffcc00']}] },
+        options:{ plugins:{legend:{labels:{color:'#e8e8f0',font:{size:11}}}} }
+    });
+
+    // Tables
+    document.getElementById('referrer-table').innerHTML = d.referrerStats.map(x=>'<tr><td>'+(x._id||'Direct')+'</td><td class="num">'+x.count+'</td></tr>').join('');
+    document.getElementById('page-table').innerHTML     = d.pageStats.map(x=>'<tr><td>/'+( x._id||'home')+'</td><td class="num">'+x.count+'</td></tr>').join('');
+
+    // SEO Editor
+    buildSeoEditor(d.seoPages, siteId);
+
+    // Install tab
+    buildInstallTab(d.site, d.hubUrl);
+
+    // History
+    document.getElementById('kw-history').innerHTML = d.keywordHistory.map(log =>
+        '<div style="padding:12px;border-bottom:1px solid #1e1e2a">' +
+        '<div style="display:flex;justify-content:space-between;margin-bottom:6px">' +
+        '<span style="font-size:0.75rem;color:#6b6b7e">/'+(log.page||'home')+'</span>' +
+        '<span class="src-badge src-'+log.source+'">'+log.source+'</span></div>' +
+        '<div style="font-size:0.78rem;color:#e8e8f0">'+( log.keywords||'').substring(0,120)+'...</div>' +
+        '<div style="font-size:0.7rem;color:#6b6b7e;margin-top:4px">'+new Date(log.date).toLocaleString('en-IN')+'</div></div>'
+    ).join('') || '<div style="color:#6b6b7e;padding:12px">No history yet</div>';
+
+    // Settings
+    document.getElementById('set-name').value     = d.site.name;
+    document.getElementById('set-domain').value   = d.site.domain||'';
+    document.getElementById('set-category').value = d.site.category||'default';
+}
+
+// ─── SEO EDITOR ───────────────────────────────────────────────────────────────
+function buildSeoEditor(pages, siteId) {
+    var tabs = document.getElementById('page-tabs');
+    var eds  = document.getElementById('page-editors');
+    tabs.innerHTML = pages.map((p,i) => '<button class="pg-tab'+(i===0?' active':'') +'" onclick="switchPage(\'ed-'+p.page+'\',this)">/' +p.page+'</button>').join('');
+    eds.innerHTML  = pages.map((p,i) => {
+        var fixed    = p.fixedKeywords    || '';
+        var trending = p.trendingKeywords || '';
+        return '<div class="page-ed card '+(i===0?'active':'') +'" id="ed-'+p.page+'">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">' +
+        '<span style="font-weight:700">/'+p.page+'</span>' +
+        '<span style="font-size:0.72rem;color:#6b6b7e">Updated: '+new Date(p.updatedAt).toLocaleDateString('en-IN')+'</span></div>' +
+        '<form onsubmit="saveSeo(event,\''+siteId+'\',\''+p.page+'\')">' +
+        '<label>Title</label><input type="text" name="title" value="'+(p.title||'')+'" maxlength="70">' +
+        '<label>Description</label><textarea name="description" rows="3" maxlength="200">'+(p.description||'')+'</textarea>' +
+        '<label>Keywords (Auto-updated by Robot)</label>' +
+        '<div class="kw-box">' +
+        (fixed    ? '<div class="kw-fixed">📌 FIXED: '+fixed+'</div>'       : '') +
+        (trending ? '<div class="kw-trending">📈 TRENDING: '+trending+'</div>' : (p.keywords||'No keywords yet — click Update')) +
+        '</div>' +
+        '<label>Robots</label><select name="robots">' +
+        ['index, follow','noindex, nofollow','index, nofollow','noindex, follow'].map(v=>'<option'+(p.robots===v?' selected':'')+'>'+v+'</option>').join('') +
+        '</select>' +
+        '<button class="btn btn-o" type="submit">💾 Save</button></form></div>';
+    }).join('');
+}
+function switchPage(id, btn) {
+    document.querySelectorAll('.page-ed').forEach(e=>e.classList.remove('active'));
+    document.querySelectorAll('.pg-tab').forEach(b=>b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+}
+async function saveSeo(e, siteId, page) {
+    e.preventDefault();
+    var f = new FormData(e.target);
+    await fetch('/api/dashboard?action=update-seo&siteId='+siteId, {
+        method:'POST', credentials:'include', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ page, title:f.get('title'), description:f.get('description'), robots:f.get('robots') })
+    });
+    toast('Saved!');
+}
+async function addPage() {
+    var page = document.getElementById('new-page-input').value.trim().toLowerCase().replace(/[^a-z0-9-]/g,'');
+    if (!page) return;
+    await fetch('/api/dashboard?action=add-page&siteId='+curSite, {
+        method:'POST', credentials:'include', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({page})
+    });
+    document.getElementById('new-page-input').value = '';
+    loadSite(curSite, 7);
+    toast('Page added!');
+}
+
+// ─── INSTALL TAB ──────────────────────────────────────────────────────────────
+function buildInstallTab(site, hubUrl) {
+    var HUB = hubUrl;
+    var SID = site.siteId;
+    var NM  = site.name;
+
+    document.getElementById('c-html').textContent =
+        '<!-- Add before </body> on every page -->\n<script src="'+HUB+'/api/seo.js?site='+SID+'" defer><\/script>';
+
+    document.getElementById('c-helper').textContent =
+        "const SEO_HUB = '"+HUB+"';\n\nasync function getSeo(page) {\n    try {\n        const r = await fetch(SEO_HUB + '/api/seo/"+SID+"?page=' + (page||'home'));\n        return await r.json();\n    } catch(e) {\n        return { title: '"+NM+"', description: 'Welcome', keywords: 'services', robots: 'index, follow' };\n    }\n}";
+
+    document.getElementById('c-routes').textContent =
+        "app.get('/', async (req, res) => {\n    const seo = await getSeo('home');\n    res.render('index', { seo });\n});\n\napp.get('/about', async (req, res) => {\n    const seo = await getSeo('about');\n    res.render('about', { seo });\n});";
+
+    document.getElementById('c-php').textContent =
+        "<?php\nfunction getSeoData($page) {\n    $url = '"+HUB+"/api/seo/"+SID+"?page=' . $page;\n    $ch  = curl_init();\n    curl_setopt($ch, CURLOPT_URL, $url);\n    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);\n    curl_setopt($ch, CURLOPT_TIMEOUT, 5);\n    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);\n    $result = curl_exec($ch);\n    curl_close($ch);\n    return $result ? json_decode($result, true) : [];\n}\n$seo = getSeoData('home'); // change per page\n?>\n\n<title><?= $seo['title'] ?? '"+NM+"' ?></title>\n<meta name=\"description\" content=\"<?= $seo['description'] ?? 'Welcome' ?>\">\n<meta name=\"keywords\" content=\"<?= $seo['keywords'] ?? 'services' ?>\">\n<meta name=\"robots\" content=\"<?= $seo['robots'] ?? 'index, follow' ?>\">";
+
+    document.getElementById('c-wp').textContent =
+        "// Add to functions.php\ndefine('MFOX_HUB', '"+HUB+"');\ndefine('MFOX_SITE', '"+SID+"');\n\nfunction mfox_get_slug() {\n    global $post;\n    if (is_front_page() || is_home()) return 'home';\n    if (is_singular()) return $post ? $post->post_name : 'home';\n    if (is_404()) return '404';\n    return 'home';\n}\nfunction mfox_head() {\n    $seo = json_decode(file_get_contents(MFOX_HUB.'/api/seo/'.MFOX_SITE.'?page='.mfox_get_slug()), true) ?: [];\n    if (!empty($seo['title']))       echo '<title>'.esc_html($seo['title']).'</title>'.\"\\n\";\n    if (!empty($seo['description'])) echo '<meta name=\"description\" content=\"'.esc_attr($seo['description']).'\">'.\"\\n\";\n    if (!empty($seo['keywords']))    echo '<meta name=\"keywords\" content=\"'.esc_attr($seo['keywords']).'\">'.\"\\n\";\n}\nadd_action('wp_head', 'mfox_head', 1);\nfunction mfox_footer() {\n    echo '<script src=\"'.MFOX_HUB.'/api/seo.js?site='.MFOX_SITE.'\" defer><\\/script>'.\"\\n\";\n}\nadd_action('wp_footer', 'mfox_footer');";
+
+    document.getElementById('c-next').textContent =
+        "// lib/seo.js\nexport async function getSeo(page = 'home') {\n    try {\n        const r = await fetch('"+HUB+"/api/seo/"+SID+"?page=' + page, { next: { revalidate: 1800 } });\n        return await r.json();\n    } catch { return {}; }\n}\n\n// In any page component:\nexport async function getServerSideProps() {\n    const seo = await getSeo('home');\n    return { props: { seo } };\n}";
+}
+function copyCode(id) {
+    navigator.clipboard.writeText(document.getElementById(id).textContent);
+    toast('Copied!');
+}
+
+// ─── ACTIONS ──────────────────────────────────────────────────────────────────
+async function forceUpdate() {
+    document.getElementById('force-btn').textContent = '⏳ Updating...';
+    await fetch('/api/dashboard?action=force-update&siteId='+curSite, {method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body:'{}'});
+    document.getElementById('force-btn').textContent = '⚡ Update';
+    loadSite(curSite, 7);
+    toast('Keywords updated!');
+}
+async function doForceAll() {
+    var r = await fetch('/api/cron?action=update&secret='+(prompt('Enter cron secret:')||''), {credentials:'include'});
+    var d = await r.json();
+    toast('Updated ' + (d.updated||0) + ' pages');
+    loadDashboard();
+}
+async function saveSettings(e) {
+    e.preventDefault();
+    await fetch('/api/dashboard?action=update-settings&siteId='+curSite, {
+        method:'POST', credentials:'include', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ name: document.getElementById('set-name').value, domain: document.getElementById('set-domain').value, category: document.getElementById('set-category').value })
+    });
+    toast('Settings saved!');
+    loadSite(curSite, 7);
+}
+async function deleteSite() {
+    if (!confirm('Delete this site? Cannot be undone.')) return;
+    await fetch('/api/dashboard?action=delete-site&siteId='+curSite, {method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body:'{}'});
+    showDashboard();
+    toast('Site deleted');
+}
+function showNewSiteModal() { document.getElementById('new-site-modal').classList.add('open'); }
+function closeModal()       { document.getElementById('new-site-modal').classList.remove('open'); }
+async function createSite() {
+    var name = document.getElementById('ns-name').value.trim();
+    var domain = document.getElementById('ns-domain').value.trim();
+    var category = document.getElementById('ns-category').value;
+    if (!name) { document.getElementById('ns-err').style.display='block'; document.getElementById('ns-err').textContent='Name required'; return; }
+    var r = await fetch('/api/dashboard?action=create-site', {method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name, domain, category})});
+    var d = await r.json();
+    if (d.error) { document.getElementById('ns-err').style.display='block'; document.getElementById('ns-err').textContent=d.error; return; }
+    closeModal();
+    showSite(d.siteId);
+    toast('Site created!');
+}
+
+// ─── TABS ─────────────────────────────────────────────────────────────────────
+function switchTab(id, btn) {
+    document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+    document.getElementById('tab-'+id).classList.add('active');
+    btn.classList.add('active');
+}
+
+// ─── TOAST ────────────────────────────────────────────────────────────────────
+function toast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg; t.style.display='block';
+    setTimeout(() => t.style.display='none', 2500);
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+// Check if already logged in
+fetch('/api/dashboard?action=sites', {credentials:'include'}).then(r => {
+    if (r.ok) { document.getElementById('login-screen').style.display='none'; showDashboard(); }
+});
+</script>
+</body>
+</html>
