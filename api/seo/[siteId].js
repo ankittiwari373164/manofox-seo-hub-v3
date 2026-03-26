@@ -1,5 +1,5 @@
-const { connectDB, Site, Seo } = require('../lib/db');
-const { fetchTrendingKeywords, CATEGORY_KEYWORDS, DEFAULT_PAGES } = require('../lib/keywords');
+const { connectDB, Site, Seo } = require('../../lib/db');
+const { fetchTrendingKeywords, getDefaultFixed, detectEcomSubcategory, CATEGORY_KEYWORDS, DEFAULT_PAGES } = require('../../lib/keywords');
 
 module.exports = async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
             if (page === 'index' || page === '') page = 'home';
         } catch { page = 'home'; }
 
-        // Auto-register new site
+        // Auto-register new site on first visit
         const siteExists = await Site.findOne({ siteId });
         if (!siteExists) {
             const referer = req.headers.referer || req.headers.origin || '';
@@ -34,31 +34,45 @@ module.exports = async (req, res) => {
                     else if (d.includes('tech')||d.includes('soft')||d.includes('digital')||d.includes('web')||d.includes('app')) category='technology';
                     else if (d.includes('food')||d.includes('restaurant')||d.includes('eat')||d.includes('kitchen')) category='restaurant';
                     else if (d.includes('property')||d.includes('realty')||d.includes('estate')) category='realestate';
-                    else if (d.includes('market')||d.includes('seo')||d.includes('agency')||d.includes('brand')) category='digitalmarketing';
+                    else if (d.includes('market')||d.includes('seo')||d.includes('agency')||d.includes('brand')||d.includes('fox')) category='digitalmarketing';
                 }
             } catch {}
 
             const siteName = siteId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
             await Site.create({ siteId, name: siteName, domain, category, autoRegistered: true });
 
+            // Auto-create all default pages with UNIQUE keywords per page
             const pages = DEFAULT_PAGES[category] || DEFAULT_PAGES.default;
             for (const pg of pages) {
-                const { keywords, fixedKeywords, trendingKeywords } = await fetchTrendingKeywords(category, pg);
+                const effectiveCat = category === 'ecommerce' ? detectEcomSubcategory(siteId, pg) : category;
+                const { keywords, fixedKeywords, shortTailKeywords, longTailKeywords } = await fetchTrendingKeywords(effectiveCat, pg);
                 await Seo.create({
                     siteId, page: pg,
                     title: siteName + (pg === 'home' ? '' : ' - ' + pg.charAt(0).toUpperCase() + pg.slice(1).replace(/-/g,' ')),
                     description: 'Welcome to ' + siteName + '.',
-                    keywords, fixedKeywords, trendingKeywords
+                    keywords, fixedKeywords, shortTailKeywords, longTailKeywords
                 });
             }
-            console.log('Auto-registered: ' + siteId + ' (' + category + ')');
+            console.log('Auto-registered: ' + siteId + ' (' + category + ') — ' + pages.length + ' pages');
         } else {
             await Site.updateOne({ siteId }, { lastSeen: new Date() });
         }
 
+        // Auto-create page if it doesn't exist yet
         let seo = await Seo.findOne({ siteId, page });
-        if (!seo) seo = await Seo.findOne({ siteId, page: 'home' });
-        if (!seo) return res.json({ title: siteId, description: '', keywords: CATEGORY_KEYWORDS.default, robots: 'index, follow' });
+        if (!seo) {
+            const site = await Site.findOne({ siteId });
+            const cat  = site?.category || 'default';
+            const effectiveCat = cat === 'ecommerce' ? detectEcomSubcategory(siteId, page) : cat;
+            const { keywords, fixedKeywords, shortTailKeywords, longTailKeywords } = await fetchTrendingKeywords(effectiveCat, page);
+            const siteName = site?.name || siteId;
+            seo = await Seo.create({
+                siteId, page,
+                title: siteName + ' - ' + page.charAt(0).toUpperCase() + page.slice(1).replace(/-/g,' '),
+                description: 'Welcome to ' + siteName + '.',
+                keywords, fixedKeywords, shortTailKeywords, longTailKeywords
+            });
+        }
 
         res.json(seo);
     } catch (err) {

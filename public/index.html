@@ -395,10 +395,14 @@ function buildSeoEditor(pages, siteId) {
         '<label>Title</label><input type="text" name="title" value="'+(p.title||'')+'" maxlength="70">' +
         '<label>Description</label><textarea name="description" rows="3" maxlength="200">'+(p.description||'')+'</textarea>' +
         '<label>Keywords (Auto-updated by Robot)</label>' +
+        '<div style="margin-bottom:6px"><label style="font-size:0.72rem;color:#6b6b7e;font-weight:700">📌 FIXED KEYWORDS (10 max — you edit these)</label>' +
+        '<input type="text" name="fixedKeywords" value="'+(p.fixedKeywords||'')+'" placeholder="keyword1, keyword2, ... (10 max)" style="margin-bottom:8px"></div>' +
+        '<div class="kw-box" style="margin-bottom:6px">' +
+        '<div style="font-size:0.68rem;color:#6b9fff;margin-bottom:4px">📊 SHORT TAIL (auto — 1-3 words, high volume)</div>' +
+        '<div style="color:#60a5fa">'+(p.shortTailKeywords||'Not generated yet')+'</div></div>' +
         '<div class="kw-box">' +
-        (fixed    ? '<div class="kw-fixed">📌 FIXED: '+fixed+'</div>'       : '') +
-        (trending ? '<div class="kw-trending">📈 TRENDING: '+trending+'</div>' : (p.keywords||'No keywords yet — click Update')) +
-        '</div>' +
+        '<div style="font-size:0.68rem;color:#00e88f;margin-bottom:4px">🎯 LONG TAIL (auto — 4-8 words, high intent)</div>' +
+        '<div style="color:#00e88f">'+(p.longTailKeywords||'Not generated yet')+'</div></div>' +
         '<label>Robots</label><select name="robots">' +
         ['index, follow','noindex, nofollow','index, nofollow','noindex, follow'].map(v=>'<option'+(p.robots===v?' selected':'')+'>'+v+'</option>').join('') +
         '</select>' +
@@ -416,7 +420,7 @@ async function saveSeo(e, siteId, page) {
     var f = new FormData(e.target);
     await fetch('/api/dashboard?action=update-seo&siteId='+siteId, {
         method:'POST', credentials:'include', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ page, title:f.get('title'), description:f.get('description'), robots:f.get('robots') })
+        body: JSON.stringify({ page, title:f.get('title'), description:f.get('description'), robots:f.get('robots'), fixedKeywords:f.get('fixedKeywords') })
     });
     toast('Saved!');
 }

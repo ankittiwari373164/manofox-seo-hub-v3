@@ -93,10 +93,20 @@ module.exports = async (req, res) => {
         }
 
         if (action === 'update-seo' && siteId) {
-            const { page, title, description, keywords, robots } = body;
+            const { page, title, description, robots, fixedKeywords } = body;
+            const updateData = { title, description, robots, updatedAt: new Date() };
+            // Save fixed keywords if provided — rebuild combined keywords
+            if (fixedKeywords !== undefined) {
+                const seoDoc = await Seo.findOne({ siteId, page: page || 'home' });
+                updateData.fixedKeywords = fixedKeywords;
+                // Rebuild combined keywords: fixed + existing auto
+                const shortTail = seoDoc?.shortTailKeywords || '';
+                const longTail  = seoDoc?.longTailKeywords  || '';
+                updateData.keywords = [fixedKeywords, shortTail, longTail].filter(Boolean).join(', ');
+            }
             await Seo.findOneAndUpdate(
                 { siteId, page: page || 'home' },
-                { title, description, keywords, robots, updatedAt: new Date() },
+                updateData,
                 { upsert: true }
             );
             return res.json({ ok: true });
