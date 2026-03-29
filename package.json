@@ -1,7 +1,8 @@
 {
   "name": "manofox-seo-hub",
-  "version": "3.0.0",
-  "description": "Manofox SEO Hub — Vercel Serverless",
+  "version": "4.0.0",
+  "description": "Manofox SEO Hub v4 — Auto SEO for all client websites",
+  "engines": { "node": ">=18" },
   "dependencies": {
     "mongoose": "^8.0.0"
   }

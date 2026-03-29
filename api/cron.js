@@ -1,10 +1,10 @@
-const { connectDB, Site, Seo, KeywordLog } = require('../lib/db');
+const { connectDB, Site, Seo, KeywordLog, CronLog } = require('../lib/db');
 const { fetchTrendingKeywords, detectEcomSubcategory } = require('../lib/keywords');
 
 module.exports = async (req, res) => {
-    // Health check for UptimeRobot
+    // Health / ping — no auth needed (for UptimeRobot)
     if (req.method === 'GET' && !req.query.secret && !req.query.action) {
-        return res.json({ status: 'ok', time: new Date().toISOString() });
+        return res.json({ status: 'ok', time: new Date().toISOString(), service: 'Manofox SEO Hub v4' });
     }
 
     const secret = process.env.CRON_SECRET || 'manofox-cron-2025';
@@ -13,7 +13,7 @@ module.exports = async (req, res) => {
     try {
         await connectDB();
         const sites = await Site.find({});
-        let totalPages = 0;
+        let totalPages = 0, errors = 0;
         const log = [];
 
         for (const site of sites) {
@@ -21,39 +21,39 @@ module.exports = async (req, res) => {
             const category = site.category || 'default';
 
             for (const seoPage of pages) {
-                // Detect ecommerce subcategory from page slug
-                const effectiveCat = category === 'ecommerce'
-                    ? detectEcomSubcategory(site.siteId, seoPage.page)
-                    : category;
+                try {
+                    const effCat = category === 'ecommerce'
+                        ? detectEcomSubcategory(site.siteId, seoPage.page)
+                        : category;
 
-                // Pass existing fixedKeywords so user edits are preserved
-                const { keywords, fixedKeywords, shortTailKeywords, longTailKeywords, source } =
-                    await fetchTrendingKeywords(effectiveCat, seoPage.page, seoPage.fixedKeywords);
+                    // Preserve user's fixed keywords — only refresh auto keywords
+                    const { keywords, fixedKeywords, shortTailKeywords, longTailKeywords, source } =
+                        await fetchTrendingKeywords(effCat, seoPage.page, seoPage.fixedKeywords);
 
-                await Seo.updateOne(
-                    { siteId: site.siteId, page: seoPage.page },
-                    { $set: {
-                        keywords,
-                        fixedKeywords,       // preserved from DB if user edited
-                        shortTailKeywords,   // refreshed from Google News
-                        longTailKeywords,    // refreshed from Google News
-                        updatedAt: new Date()
-                    }}
-                );
+                    await Seo.updateOne(
+                        { siteId: site.siteId, page: seoPage.page },
+                        { $set: { keywords, fixedKeywords, shortTailKeywords, longTailKeywords, updatedAt: new Date() } }
+                    );
 
-                await KeywordLog.create({
-                    siteId: site.siteId,
-                    page:   seoPage.page,
-                    keywords: '[' + seoPage.page + '] SHORT: ' + shortTailKeywords + ' | LONG: ' + longTailKeywords,
-                    source
-                });
+                    await KeywordLog.create({
+                        siteId: site.siteId, page: seoPage.page,
+                        keywords: '[' + seoPage.page + '] SHORT: ' + shortTailKeywords + ' | LONG: ' + longTailKeywords,
+                        source
+                    });
 
-                totalPages++;
-                log.push('✅ ' + site.name + '/' + seoPage.page + ' [' + effectiveCat + '] (' + source + ')');
+                    totalPages++;
+                    log.push('✅ ' + site.name + '/' + seoPage.page + ' [' + effCat + '] (' + source + ')');
+                } catch (err) {
+                    errors++;
+                    log.push('❌ ' + site.name + '/' + seoPage.page + ': ' + err.message);
+                }
             }
         }
 
-        return res.json({ ok: true, updated: totalPages, sites: sites.length, log });
+        // Record this cron run so dashboard can show "last updated X minutes ago"
+        await CronLog.create({ runAt: new Date(), pagesUpdated: totalPages, sitesUpdated: sites.length, errors });
+
+        return res.json({ ok: true, updated: totalPages, sites: sites.length, errors, log });
     } catch (err) {
         return res.status(500).json({ error: err.message });
     }

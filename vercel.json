@@ -13,5 +13,11 @@
   ],
   "functions": {
     "api/**/*.js": { "maxDuration": 30 }
-  }
+  },
+  "crons": [
+    {
+      "path": "/api/cron?secret=YOUR_CRON_SECRET_HERE",
+      "schedule": "0 */7 * * *"
+    }
+  ]
 }

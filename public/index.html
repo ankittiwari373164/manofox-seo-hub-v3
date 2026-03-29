@@ -3,262 +3,529 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manofox SEO Hub</title>
+<title>Manofox SEO Hub v4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
+/* ─── RESET & BASE ─────────────────────────────────────────────────────────── */
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#0a0a0f;color:#e8e8f0;font-family:'Segoe UI',sans-serif;min-height:100vh}
+:root{
+  --bg0:#07070d;--bg1:#0e0e1a;--bg2:#141422;--bg3:#1a1a2e;--bg4:#20203c;
+  --br:#ffffff0f;--br2:#ffffff18;--br3:#ffffff28;
+  --tx:#e8e6ff;--tx2:#9896b4;--tx3:#5c5a78;
+  --acc:#ff4500;--acc2:#ff7a3c;--acc3:#ffb380;
+  --grn:#00d4a0;--grn2:#00ffbf;
+  --blu:#4d8fff;--blu2:#7eb5ff;
+  --pur:#a855f7;--pur2:#c78bff;
+  --yel:#f5a623;--red:#ff4d6d;
+  --r:12px;--r2:18px;--r3:24px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg0);color:var(--tx);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
-.hdr{display:flex;justify-content:space-between;align-items:center;padding:16px 32px;border-bottom:1px solid #1e1e2a;background:#0a0a0f;position:sticky;top:0;z-index:99}
-.logo{font-weight:800;font-size:1.2rem}.logo span{color:#ff5c00}
-.btn{padding:7px 16px;border-radius:6px;border:none;cursor:pointer;font-size:0.82rem;font-weight:600;display:inline-block;transition:0.2s;text-decoration:none}
-.btn-o{background:#ff5c00;color:#fff}.btn-o:hover{background:#ff9a3c}
-.btn-g{background:transparent;border:1px solid #1e1e2a;color:#6b6b7e}.btn-g:hover{border-color:#ff5c00;color:#e8e8f0}
-.btn-green{background:rgba(0,232,143,0.1);color:#00e88f;border:1px solid rgba(0,232,143,0.3)}
-.btn-red{background:rgba(239,68,68,0.1);color:#ef4444;border:1px solid rgba(239,68,68,0.2)}
-.main{padding:32px}
-/* Login */
-#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0a0a0f}
-.login-box{background:#111118;border:1px solid #1e1e2a;border-radius:16px;padding:40px;width:380px;text-align:center}
-.login-box h2{font-size:1.5rem;margin-bottom:8px}.login-box p{color:#6b6b7e;font-size:0.85rem;margin-bottom:28px}
-.login-box input{width:100%;padding:12px 16px;background:#0a0a0f;border:1px solid #1e1e2a;border-radius:8px;color:#e8e8f0;font-size:0.9rem;margin-bottom:14px;outline:none}
-.login-box input:focus{border-color:#ff5c00}
-.err{color:#ef4444;font-size:0.82rem;margin-bottom:12px}
-/* Dashboard */
-#dashboard-screen{display:none}
-.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
-.stat-card{background:#111118;border:1px solid #1e1e2a;border-radius:12px;padding:20px}
-.stat-label{font-size:0.72rem;color:#6b6b7e;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
-.stat-value{font-size:1.8rem;font-weight:800;color:#e8e8f0}
-.stat-sub{font-size:0.75rem;color:#6b6b7e;margin-top:4px}
-.site-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
-.site-card{background:#111118;border:1px solid #1e1e2a;border-radius:12px;padding:20px;cursor:pointer;transition:0.2s}
-.site-card:hover{border-color:#ff5c00}
-.site-name{font-size:1rem;font-weight:700;margin-bottom:4px}
-.site-domain{font-size:0.78rem;color:#6b6b7e;margin-bottom:12px}
-.site-badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:0.7rem;font-weight:700;background:rgba(255,92,0,0.12);color:#ff9a3c;border:1px solid rgba(255,92,0,0.2)}
-/* Site Detail */
-#site-screen{display:none}
-.bread{font-size:0.78rem;color:#6b6b7e;margin-bottom:18px;cursor:pointer}.bread:hover{color:#ff5c00}
-.page-title{font-size:1.8rem;font-weight:800;margin-bottom:4px}
-.tabs{display:flex;gap:4px;border-bottom:1px solid #1e1e2a;margin-bottom:24px;overflow-x:auto}
-.tab{padding:10px 18px;cursor:pointer;border:none;background:transparent;color:#6b6b7e;font-size:0.85rem;font-weight:600;border-bottom:2px solid transparent;white-space:nowrap;transition:0.2s}
-.tab.active{color:#e8e8f0;border-bottom-color:#ff5c00}
+::selection{background:rgba(255,69,0,.3);color:#fff}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--bg1)}
+::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:4px}
+
+/* ─── NOISE TEXTURE OVERLAY ─────────────────────────────────────────────────── */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");background-size:160px;opacity:.025;pointer-events:none;z-index:0}
+
+/* ─── TYPOGRAPHY ─────────────────────────────────────────────────────────────── */
+h1,h2,h3,.logo-text,.page-title{font-family:'Syne',sans-serif}
+code,pre,.mono{font-family:'JetBrains Mono',monospace}
+
+/* ─── BUTTONS ─────────────────────────────────────────────────────────────────── */
+.btn{padding:9px 20px;border-radius:var(--r);border:none;cursor:pointer;font-size:.82rem;font-weight:600;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;transition:.18s;white-space:nowrap;position:relative;z-index:1}
+.btn-pri{background:var(--acc);color:#fff;box-shadow:0 0 24px rgba(255,69,0,.25)}
+.btn-pri:hover{background:var(--acc2);transform:translateY(-1px);box-shadow:0 4px 28px rgba(255,69,0,.4)}
+.btn-ghost{background:transparent;border:1px solid var(--br2);color:var(--tx2)}
+.btn-ghost:hover{border-color:var(--acc);color:var(--tx)}
+.btn-grn{background:rgba(0,212,160,.1);color:var(--grn);border:1px solid rgba(0,212,160,.25)}
+.btn-red{background:rgba(255,77,109,.08);color:var(--red);border:1px solid rgba(255,77,109,.25)}
+.btn-sm{padding:6px 14px;font-size:.78rem}
+.btn-xs{padding:4px 10px;font-size:.72rem;border-radius:8px}
+
+/* ─── HEADER ─────────────────────────────────────────────────────────────────── */
+.hdr{display:flex;justify-content:space-between;align-items:center;padding:14px 32px;border-bottom:1px solid var(--br);background:rgba(7,7,13,.85);backdrop-filter:blur(16px);position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-mark{width:34px;height:34px;background:linear-gradient(135deg,var(--acc),var(--acc2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 0 20px rgba(255,69,0,.35)}
+.logo-text{font-size:1.15rem;font-weight:800;letter-spacing:-.5px}
+.logo-text em{color:var(--acc);font-style:normal}
+.logo-v{font-size:.6rem;background:var(--bg3);border:1px solid var(--br2);color:var(--tx3);padding:2px 7px;border-radius:20px;margin-left:4px;font-family:'JetBrains Mono',monospace}
+
+/* ─── MAIN LAYOUT ────────────────────────────────────────────────────────────── */
+.main{padding:28px 32px;position:relative;z-index:1}
+#dashboard-screen,#site-screen{display:none}
+
+/* ─── LOGIN ──────────────────────────────────────────────────────────────────── */
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;position:relative;z-index:1}
+#login-screen::after{content:'';position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(255,69,0,.1) 0%,transparent 70%);pointer-events:none;top:50%;left:50%;transform:translate(-50%,-50%)}
+.login-card{background:var(--bg1);border:1px solid var(--br2);border-radius:var(--r3);padding:48px 40px;width:420px;text-align:center;position:relative;z-index:2;box-shadow:0 40px 80px rgba(0,0,0,.6)}
+.login-icon{font-size:3.5rem;margin-bottom:16px;filter:drop-shadow(0 0 28px rgba(255,69,0,.6));display:block}
+.login-card h2{font-size:1.8rem;font-weight:800;letter-spacing:-.5px;margin-bottom:6px}
+.login-card p{color:var(--tx2);font-size:.87rem;margin-bottom:32px}
+.login-card input{width:100%;padding:14px 18px;background:var(--bg0);border:1px solid var(--br2);border-radius:var(--r);color:var(--tx);font-size:.9rem;margin-bottom:14px;outline:none;font-family:'DM Sans',sans-serif;transition:.2s}
+.login-card input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(255,69,0,.12)}
+.err-msg{color:var(--red);font-size:.8rem;margin-bottom:10px}
+
+/* ─── STAT GRID ──────────────────────────────────────────────────────────────── */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.stat-card{background:var(--bg1);border:1px solid var(--br);border-radius:var(--r2);padding:22px 20px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s}
+.stat-card:hover{border-color:var(--br3);transform:translateY(-1px)}
+.stat-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--acc),var(--acc2));transform:scaleX(0);transition:transform .3s;transform-origin:left}
+.stat-card:hover::after{transform:scaleX(1)}
+.stat-lbl{font-size:.67rem;color:var(--tx3);font-weight:600;letter-spacing:1.4px;text-transform:uppercase;margin-bottom:10px}
+.stat-val{font-size:2.2rem;font-weight:800;color:var(--tx);font-family:'Syne',sans-serif;line-height:1}
+.stat-sub{font-size:.73rem;color:var(--tx3);margin-top:7px}
+.stat-badge{display:inline-flex;align-items:center;gap:3px;font-size:.67rem;font-weight:600;padding:2px 8px;border-radius:20px;margin-top:6px}
+.badge-up{background:rgba(0,212,160,.1);color:var(--grn)}
+.badge-neu{background:rgba(77,143,255,.1);color:var(--blu)}
+
+/* ─── CRON STATUS BAR ────────────────────────────────────────────────────────── */
+.cron-bar{background:linear-gradient(90deg,rgba(0,212,160,.06),rgba(0,212,160,.02));border:1px solid rgba(0,212,160,.15);border-radius:var(--r);padding:12px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.cron-left{display:flex;align-items:center;gap:10px}
+.cron-dot{width:7px;height:7px;border-radius:50%;background:var(--grn);animation:cron-pulse 2s infinite}
+@keyframes cron-pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,212,160,.5)}50%{box-shadow:0 0 0 6px rgba(0,212,160,0)}}
+.cron-txt{font-size:.8rem;color:var(--tx2)}
+.cron-txt strong{color:var(--tx)}
+
+/* ─── SITE GRID ──────────────────────────────────────────────────────────────── */
+.section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.section-lbl{font-size:.67rem;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--tx3)}
+.controls-row{display:flex;gap:8px;align-items:center}
+.filter-input{padding:7px 14px;background:var(--bg1);border:1px solid var(--br);border-radius:var(--r);color:var(--tx);font-size:.8rem;outline:none;font-family:'DM Sans',sans-serif;width:180px;transition:.2s}
+.filter-input:focus{border-color:var(--acc)}
+.filter-sel{padding:7px 12px;background:var(--bg1);border:1px solid var(--br);border-radius:var(--r);color:var(--tx2);font-size:.78rem;outline:none;font-family:'DM Sans',sans-serif;cursor:pointer}
+.filter-sel option{background:var(--bg2)}
+
+.site-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.site-card{background:var(--bg1);border:1px solid var(--br);border-radius:var(--r2);padding:22px;cursor:pointer;transition:.2s;position:relative;overflow:hidden}
+.site-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,69,0,.4),transparent);opacity:0;transition:.3s}
+.site-card:hover{border-color:rgba(255,69,0,.35);transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.site-card:hover::before{opacity:1}
+.site-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+.site-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;background:var(--bg3);border:1px solid var(--br2)}
+.site-live{display:flex;align-items:center;gap:4px;font-size:.67rem;color:var(--grn);font-weight:600}
+.site-live-dot{width:5px;height:5px;border-radius:50%;background:var(--grn);animation:cron-pulse 2s infinite}
+.site-name{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:3px}
+.site-domain{font-size:.73rem;color:var(--tx3);font-family:'JetBrains Mono',monospace;margin-bottom:14px}
+.site-footer{display:flex;justify-content:space-between;align-items:center}
+.cat-pill{padding:3px 10px;border-radius:20px;font-size:.67rem;font-weight:700;border:1px solid}
+.cat-education{background:rgba(77,143,255,.1);color:var(--blu);border-color:rgba(77,143,255,.25)}
+.cat-ecommerce{background:rgba(168,85,247,.1);color:var(--pur);border-color:rgba(168,85,247,.25)}
+.cat-technology{background:rgba(0,212,160,.1);color:var(--grn);border-color:rgba(0,212,160,.25)}
+.cat-healthcare{background:rgba(245,166,35,.1);color:var(--yel);border-color:rgba(245,166,35,.25)}
+.cat-digitalmarketing{background:rgba(255,69,0,.1);color:var(--acc2);border-color:rgba(255,69,0,.25)}
+.cat-restaurant{background:rgba(255,77,109,.1);color:var(--red);border-color:rgba(255,77,109,.25)}
+.cat-realestate{background:rgba(245,166,35,.1);color:var(--yel);border-color:rgba(245,166,35,.25)}
+.cat-default{background:rgba(92,90,120,.1);color:var(--tx3);border-color:rgba(92,90,120,.25)}
+.site-visits{font-size:.73rem;color:var(--tx3)}
+.site-visits span{color:var(--acc2);font-weight:700}
+
+/* ─── SITE DETAIL HERO ───────────────────────────────────────────────────────── */
+.bread{font-size:.77rem;color:var(--tx3);margin-bottom:16px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:.15s}
+.bread:hover{color:var(--acc)}
+.site-hero{display:flex;align-items:center;gap:18px;margin-bottom:28px;flex-wrap:wrap}
+.site-hero-ico{width:56px;height:56px;border-radius:14px;background:var(--bg3);border:1px solid var(--br2);display:flex;align-items:center;justify-content:center;font-size:1.8rem}
+.site-hero-info .page-title{font-size:2rem;font-weight:800;letter-spacing:-.5px;line-height:1.1}
+.site-hero-info .site-meta-row{display:flex;align-items:center;gap:8px;margin-top:4px;flex-wrap:wrap}
+.site-meta-domain{font-size:.8rem;color:var(--acc2);font-family:'JetBrains Mono',monospace}
+.auto-badge{display:inline-flex;align-items:center;gap:4px;font-size:.67rem;font-weight:700;padding:2px 9px;border-radius:20px;background:rgba(0,212,160,.1);color:var(--grn);border:1px solid rgba(0,212,160,.25)}
+
+/* ─── TABS ───────────────────────────────────────────────────────────────────── */
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--br);margin-bottom:26px;overflow-x:auto}
+.tab{padding:11px 18px;cursor:pointer;border:none;background:transparent;color:var(--tx3);font-size:.82rem;font-weight:600;font-family:'DM Sans',sans-serif;border-bottom:2px solid transparent;white-space:nowrap;transition:.15s;display:flex;align-items:center;gap:6px}
+.tab.active{color:var(--tx);border-bottom-color:var(--acc)}
+.tab:hover:not(.active){color:var(--tx2)}
 .tab-pane{display:none}.tab-pane.active{display:block}
-.card{background:#111118;border:1px solid #1e1e2a;border-radius:12px;padding:20px;margin-bottom:16px}
-.card-title{font-size:0.72rem;color:#6b6b7e;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px}
-label{display:block;font-size:0.78rem;color:#6b6b7e;margin-bottom:6px;font-weight:600}
-input[type=text],input[type=password],textarea,select{width:100%;padding:10px 14px;background:#0a0a0f;border:1px solid #1e1e2a;border-radius:8px;color:#e8e8f0;font-size:0.85rem;margin-bottom:14px;outline:none;font-family:inherit}
-input:focus,textarea:focus,select:focus{border-color:#ff5c00}
-textarea{resize:vertical;min-height:80px}
-.kw-box{background:#0a0a0f;border:1px solid rgba(0,232,143,0.3);border-radius:8px;padding:12px;font-size:0.78rem;color:#00e88f;line-height:1.6;margin-bottom:14px}
-.kw-fixed{color:#6b9fff;font-size:0.72rem;margin-bottom:6px}
-.kw-trending{color:#00e88f;font-size:0.72rem}
-.pg-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
-.pg-tab{padding:6px 14px;border-radius:6px;border:1px solid #1e1e2a;background:transparent;color:#6b6b7e;cursor:pointer;font-size:0.78rem;font-weight:600;transition:0.2s}
-.pg-tab.active{background:#ff5c00;color:#fff;border-color:#ff5c00}
+
+/* ─── CARDS ──────────────────────────────────────────────────────────────────── */
+.card{background:var(--bg1);border:1px solid var(--br);border-radius:var(--r2);padding:22px;margin-bottom:14px}
+.card-hdr{font-size:.67rem;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--tx3);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+
+/* ─── FORMS ──────────────────────────────────────────────────────────────────── */
+label{display:block;font-size:.75rem;color:var(--tx2);margin-bottom:5px;font-weight:500}
+input[type=text],input[type=password],input[type=url],textarea,select{width:100%;padding:10px 14px;background:var(--bg0);border:1px solid var(--br2);border-radius:var(--r);color:var(--tx);font-size:.85rem;margin-bottom:13px;outline:none;font-family:'DM Sans',sans-serif;transition:.18s}
+input:focus,textarea:focus,select:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(255,69,0,.08)}
+select option{background:var(--bg2)}
+textarea{resize:vertical;min-height:72px}
+
+/* ─── KEYWORD BOXES ──────────────────────────────────────────────────────────── */
+.kw-zone{margin-bottom:14px}
+.kw-zone-lbl{font-size:.67rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.kw-lbl-fixed{color:var(--blu2)}
+.kw-lbl-short{color:var(--pur2)}
+.kw-lbl-long{color:var(--grn)}
+.kw-box{background:var(--bg0);border:1px solid var(--br2);border-radius:var(--r);padding:11px 14px;font-size:.78rem;line-height:1.7;min-height:40px;color:var(--tx2)}
+.kw-box.short{border-color:rgba(168,85,247,.25);color:var(--pur2)}
+.kw-box.long{border-color:rgba(0,212,160,.25);color:var(--grn)}
+.kw-chip{display:inline-flex;align-items:center;padding:2px 9px;border-radius:6px;font-size:.68rem;font-weight:500;margin:2px 3px 2px 0;cursor:default}
+.chip-fixed{background:rgba(77,143,255,.1);color:var(--blu2);border:1px solid rgba(77,143,255,.2)}
+.chip-short{background:rgba(168,85,247,.1);color:var(--pur2);border:1px solid rgba(168,85,247,.2)}
+.chip-long{background:rgba(0,212,160,.08);color:var(--grn);border:1px solid rgba(0,212,160,.2)}
+
+/* ─── PAGE TABS ──────────────────────────────────────────────────────────────── */
+.pg-tabs{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px}
+.pg-tab{padding:6px 13px;border-radius:var(--r);border:1px solid var(--br2);background:transparent;color:var(--tx3);cursor:pointer;font-size:.77rem;font-weight:600;font-family:'DM Sans',sans-serif;transition:.15s}
+.pg-tab.active{background:var(--acc);color:#fff;border-color:var(--acc)}
 .page-ed{display:none}.page-ed.active{display:block}
-.analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-.num{text-align:right;color:#ff9a3c;font-weight:700}
-table{width:100%;border-collapse:collapse;font-size:0.82rem}
-th{text-align:left;padding:8px;color:#6b6b7e;font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #1e1e2a}
-td{padding:8px;border-bottom:1px solid #0f0f18}
-.day-btn{font-size:0.75rem;padding:5px 12px;border-radius:6px;border:1px solid #1e1e2a;background:transparent;color:#6b6b7e;cursor:pointer;margin-right:6px;transition:0.2s}
-.day-btn.active,.day-btn:hover{background:#ff5c00;color:#fff;border-color:#ff5c00}
-.src-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:0.68rem;font-weight:700}
-.src-google-trends{background:rgba(0,232,143,0.1);color:#00e88f}
-.src-fallback{background:rgba(255,200,0,0.1);color:#ffc800}
-.install-tab pre{background:#0a0a0f;border:1px solid #1e1e2a;border-radius:8px;padding:14px;font-size:0.75rem;color:#e8e8f0;overflow-x:auto;white-space:pre;font-family:monospace;margin-bottom:8px}
-.copy-btn{font-size:0.72rem;padding:4px 10px;border-radius:4px;border:1px solid #1e1e2a;background:transparent;color:#6b6b7e;cursor:pointer;margin-bottom:14px;float:right}
-.copy-btn:hover{border-color:#ff5c00;color:#ff5c00}
-.danger{background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.2);border-radius:12px;padding:20px;margin-top:16px}
-.danger-title{font-size:0.85rem;font-weight:700;color:#ef4444;margin-bottom:8px}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:center;justify-content:center}
+
+/* ─── TIME SELECTOR ──────────────────────────────────────────────────────────── */
+.time-row{display:flex;gap:6px;margin-bottom:16px}
+.day-btn{padding:5px 14px;border-radius:var(--r);border:1px solid var(--br2);background:transparent;color:var(--tx3);cursor:pointer;font-size:.76rem;font-weight:600;font-family:'DM Sans',sans-serif;transition:.15s}
+.day-btn.active,.day-btn:hover{background:var(--acc);color:#fff;border-color:var(--acc)}
+
+/* ─── TABLES ─────────────────────────────────────────────────────────────────── */
+table{width:100%;border-collapse:collapse;font-size:.8rem}
+th{text-align:left;padding:9px 10px;color:var(--tx3);font-size:.67rem;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--br)}
+td{padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.04)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+.num{text-align:right;font-family:'JetBrains Mono',monospace;color:var(--acc2)}
+
+/* ─── SEARCH TERMS BARS ──────────────────────────────────────────────────────── */
+.term-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.term-row:last-child{border-bottom:none}
+.term-kw{font-size:.79rem;font-family:'JetBrains Mono',monospace;color:var(--tx);min-width:0;flex-shrink:0;max-width:42%}
+.term-track{flex:1;height:4px;background:var(--bg4);border-radius:4px;overflow:hidden}
+.term-fill{height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2));border-radius:4px;transition:width .5s ease}
+.term-count{font-size:.72rem;color:var(--acc2);font-weight:700;min-width:28px;text-align:right;font-family:'JetBrains Mono',monospace}
+
+/* ─── INSTALL / CODE ─────────────────────────────────────────────────────────── */
+.fw-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+.fw-tab{padding:6px 14px;border-radius:var(--r);border:1px solid var(--br2);background:transparent;color:var(--tx3);cursor:pointer;font-size:.76rem;font-weight:700;font-family:'DM Sans',sans-serif;transition:.15s}
+.fw-tab.active{background:var(--bg3);color:var(--tx);border-color:var(--br3)}
+.fw-pane{display:none}.fw-pane.active{display:block}
+
+.code-wrap{position:relative;margin-bottom:12px}
+.code-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.code-lbl{font-size:.72rem;color:var(--tx3);font-family:'JetBrains Mono',monospace}
+pre{background:var(--bg0);border:1px solid var(--br2);border-radius:var(--r);padding:16px;font-size:.74rem;color:var(--grn);overflow-x:auto;white-space:pre;font-family:'JetBrains Mono',monospace;line-height:1.6;max-height:320px;overflow-y:auto}
+.copy-btn{font-size:.7rem;padding:4px 11px;border-radius:7px;border:1px solid var(--br2);background:transparent;color:var(--tx3);cursor:pointer;font-family:'DM Sans',sans-serif;transition:.15s;font-weight:600}
+.copy-btn:hover{border-color:var(--acc);color:var(--acc)}
+.copy-btn.ok{background:rgba(0,212,160,.1);color:var(--grn);border-color:rgba(0,212,160,.3)}
+
+/* ─── ALERTS ─────────────────────────────────────────────────────────────────── */
+.alert{padding:12px 16px;border-radius:var(--r);font-size:.8rem;margin-bottom:14px;display:flex;gap:8px;line-height:1.5}
+.alert-info{background:rgba(77,143,255,.07);border:1px solid rgba(77,143,255,.2);color:var(--blu2)}
+.alert-warn{background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.2);color:var(--yel)}
+.alert-grn{background:rgba(0,212,160,.07);border:1px solid rgba(0,212,160,.2);color:var(--grn)}
+
+/* ─── MODAL ──────────────────────────────────────────────────────────────────── */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
 .modal.open{display:flex}
-.modal-box{background:#111118;border:1px solid #1e1e2a;border-radius:16px;padding:32px;width:460px;max-width:95vw}
-.modal-box h3{margin-bottom:20px;font-size:1.1rem}
-.toast{position:fixed;bottom:24px;right:24px;background:#00e88f;color:#0a0a0f;padding:10px 20px;border-radius:8px;font-weight:700;font-size:0.85rem;z-index:999;display:none}
-@media(max-width:768px){.stat-grid{grid-template-columns:1fr 1fr}.analytics-grid{grid-template-columns:1fr}.main{padding:16px}.hdr{padding:12px 16px}}
+.modal-box{background:var(--bg2);border:1px solid var(--br2);border-radius:var(--r3);padding:36px;width:480px;max-width:95vw;animation:pop .2s ease}
+@keyframes pop{from{opacity:0;transform:scale(.96) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-box h3{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;margin-bottom:22px;display:flex;align-items:center;gap:8px}
+.modal-footer{display:flex;gap:10px;margin-top:8px}
+.modal-footer .btn{flex:1;justify-content:center}
+
+/* ─── TOAST ──────────────────────────────────────────────────────────────────── */
+.toast{position:fixed;bottom:24px;right:24px;padding:12px 22px;border-radius:var(--r);font-weight:600;font-size:.83rem;z-index:999;display:none;animation:pop .2s ease;max-width:320px}
+.toast-ok{background:var(--grn);color:#001a0d}
+.toast-err{background:var(--red);color:#fff}
+.toast-inf{background:var(--acc);color:#fff}
+
+/* ─── DANGER ─────────────────────────────────────────────────────────────────── */
+.danger-zone{background:rgba(255,77,109,.04);border:1px solid rgba(255,77,109,.2);border-radius:var(--r2);padding:22px;margin-top:14px}
+.danger-zone h4{color:var(--red);font-size:.85rem;font-weight:700;margin-bottom:8px}
+.danger-zone p{color:var(--tx3);font-size:.8rem;margin-bottom:14px}
+
+/* ─── HISTORY LOG ────────────────────────────────────────────────────────────── */
+.log-row{padding:13px;border-bottom:1px solid rgba(255,255,255,.04)}
+.log-row:last-child{border-bottom:none}
+.log-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.log-page{font-size:.75rem;font-family:'JetBrains Mono',monospace;color:var(--tx2)}
+.log-src{font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:5px}
+.src-google-trends{background:rgba(0,212,160,.1);color:var(--grn);border:1px solid rgba(0,212,160,.2)}
+.src-fallback{background:rgba(245,166,35,.1);color:var(--yel);border:1px solid rgba(245,166,35,.2)}
+.log-kw{font-size:.76rem;color:var(--tx3)}
+.log-time{font-size:.68rem;color:var(--tx3);margin-top:4px}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────────────────────── */
+@media(max-width:900px){.stat-grid{grid-template-columns:1fr 1fr}.grid-2,.grid-3{grid-template-columns:1fr}.main{padding:16px 16px}}
+@media(max-width:540px){.stat-grid{grid-template-columns:1fr}.hdr{padding:12px 16px}.site-hero{flex-direction:column;align-items:flex-start}}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
+<!-- ══════════ LOGIN ══════════ -->
 <div id="login-screen">
-  <div class="login-box">
-    <div style="font-size:2rem;margin-bottom:12px">🦊</div>
-    <h2><span style="color:#ff5c00">Mano</span>fox SEO Hub</h2>
-    <p>Manage SEO for all your sites</p>
-    <div id="login-err" class="err" style="display:none"></div>
-    <input type="password" id="pw-input" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')doLogin()">
-    <button class="btn btn-o" style="width:100%;padding:12px" onclick="doLogin()">Login →</button>
+  <div class="login-card">
+    <span class="login-icon">🦊</span>
+    <h2><em>Mano</em>fox SEO Hub</h2>
+    <p>Centralised SEO automation for all your client websites</p>
+    <div id="login-err" class="err-msg" style="display:none"></div>
+    <input type="password" id="pw-input" placeholder="Admin password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn btn-pri" style="width:100%;justify-content:center;padding:14px;font-size:.9rem" onclick="doLogin()">Sign in →</button>
   </div>
 </div>
 
-<!-- DASHBOARD -->
+<!-- ══════════ DASHBOARD ══════════ -->
 <div id="dashboard-screen">
   <div class="hdr">
-    <div class="logo"><span>Mano</span>fox<span style="color:#6b6b7e;font-weight:400;font-size:0.9rem"> SEO Hub</span></div>
-    <div style="display:flex;gap:10px;align-items:center">
-      <button class="btn btn-o" onclick="showNewSiteModal()">+ New Site</button>
-      <button class="btn btn-g" onclick="doForceAll()">⚡ Update All</button>
-      <button class="btn btn-g" onclick="doLogout()">Logout</button>
+    <div class="logo">
+      <div class="logo-mark">🦊</div>
+      <div class="logo-text"><em>Mano</em>fox SEO Hub</div>
+      <span class="logo-v">v4.0</span>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <div class="cron-left" style="margin-right:6px">
+        <div class="cron-dot"></div>
+        <span class="cron-txt" id="next-update-lbl" style="font-size:.75rem">Loading…</span>
+      </div>
+      <button class="btn btn-pri btn-sm" onclick="showNewSiteModal()">＋ Add Site</button>
+      <button class="btn btn-ghost btn-sm" onclick="doForceAll()">⚡ Update All</button>
+      <button class="btn btn-ghost btn-sm" onclick="doLogout()">Logout</button>
     </div>
   </div>
   <div class="main">
     <div class="stat-grid" id="dash-stats"></div>
-    <div style="margin-bottom:16px;font-size:0.85rem;color:#6b6b7e">YOUR SITES</div>
+    <div class="cron-bar">
+      <div class="cron-left">
+        <div class="cron-dot"></div>
+        <span class="cron-txt"><strong>SEO Auto-Update:</strong> Every 7 hours from Google News · Per-page trending keywords by category</span>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span id="last-run-badge" style="font-size:.73rem;color:var(--tx3)">Checking...</span>
+        <button class="btn btn-grn btn-sm" onclick="doForceAll()">⚡ Force Update Now</button>
+      </div>
+    </div>
+    <div class="section-hdr">
+      <div class="section-lbl">Client Websites</div>
+      <div class="controls-row">
+        <select class="filter-sel" id="cat-filter" onchange="filterSites()">
+          <option value="">All Categories</option>
+          <option>education</option><option>ecommerce</option><option>technology</option>
+          <option>healthcare</option><option>digitalmarketing</option><option>restaurant</option><option>realestate</option>
+        </select>
+        <input class="filter-input" id="search-filter" placeholder="🔍  Search sites…" oninput="filterSites()">
+      </div>
+    </div>
     <div class="site-grid" id="site-grid"></div>
   </div>
 </div>
 
-<!-- SITE DETAIL -->
+<!-- ══════════ SITE DETAIL ══════════ -->
 <div id="site-screen">
   <div class="hdr">
-    <div class="logo"><span>Mano</span>fox<span style="color:#6b6b7e;font-weight:400;font-size:0.9rem"> SEO Hub</span></div>
-    <div style="display:flex;gap:10px">
-      <button class="btn btn-o" id="force-btn" onclick="forceUpdate()">⚡ Update</button>
-      <button class="btn btn-o" onclick="showNewSiteModal()">+ New Site</button>
-      <button class="btn btn-g" onclick="showDashboard()">← Back</button>
+    <div class="logo">
+      <div class="logo-mark">🦊</div>
+      <div class="logo-text"><em>Mano</em>fox SEO Hub</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-pri btn-sm" id="force-btn" onclick="forceUpdate()">⚡ Update Keywords</button>
+      <button class="btn btn-ghost btn-sm" onclick="showNewSiteModal()">＋ Add Site</button>
+      <button class="btn btn-ghost btn-sm" onclick="showDashboard()">← Dashboard</button>
     </div>
   </div>
   <div class="main">
-    <div class="bread" onclick="showDashboard()">← Dashboard</div>
-    <div class="page-title" id="site-title"></div>
-    <div style="font-size:0.82rem;color:#6b6b7e;margin-bottom:20px" id="site-sub"></div>
+    <div class="bread" onclick="showDashboard()">← All Sites</div>
+    <div class="site-hero">
+      <div class="site-hero-ico" id="s-icon">🌐</div>
+      <div class="site-hero-info">
+        <div class="page-title" id="s-title"></div>
+        <div class="site-meta-row">
+          <span class="site-meta-domain" id="s-domain"></span>
+          <span id="s-cat-badge" class="cat-pill"></span>
+          <span id="s-auto-badge"></span>
+        </div>
+      </div>
+    </div>
+
     <div class="tabs">
       <button class="tab active" onclick="switchTab('analytics',this)">📊 Analytics</button>
+      <button class="tab" onclick="switchTab('keywords',this)">🎯 Keywords</button>
+      <button class="tab" onclick="switchTab('search',this)">🔍 Search Terms</button>
       <button class="tab" onclick="switchTab('seo',this)">✏️ SEO Editor</button>
       <button class="tab" onclick="switchTab('install',this)">📦 Install</button>
       <button class="tab" onclick="switchTab('history',this)">📋 History</button>
       <button class="tab" onclick="switchTab('settings',this)">⚙️ Settings</button>
     </div>
 
-    <!-- ANALYTICS TAB -->
+    <!-- ── ANALYTICS ── -->
     <div class="tab-pane active" id="tab-analytics">
+      <div class="time-row">
+        <button class="day-btn active" onclick="reloadSite(7,this)">7 days</button>
+        <button class="day-btn" onclick="reloadSite(30,this)">30 days</button>
+        <button class="day-btn" onclick="reloadSite(90,this)">90 days</button>
+      </div>
       <div class="stat-grid" id="site-stats"></div>
-      <div class="analytics-grid">
+      <div class="grid-2">
         <div class="card">
-          <div class="card-title">Traffic Trend</div>
-          <canvas id="traffic-chart" height="120"></canvas>
+          <div class="card-hdr">Traffic Trend<span style="font-size:.67rem;color:var(--grn);font-weight:700">● Live</span></div>
+          <canvas id="traffic-chart" height="130"></canvas>
         </div>
         <div class="card">
-          <div class="card-title">Devices</div>
-          <canvas id="device-chart" height="120"></canvas>
-        </div>
-      </div>
-      <div class="analytics-grid">
-        <div class="card">
-          <div class="card-title">Top Referrers</div>
-          <table><thead><tr><th>Source</th><th class="num">Visits</th></tr></thead>
-          <tbody id="referrer-table"></tbody></table>
-        </div>
-        <div class="card">
-          <div class="card-title">Top Pages</div>
-          <table><thead><tr><th>Page</th><th class="num">Visits</th></tr></thead>
-          <tbody id="page-table"></tbody></table>
+          <div class="card-hdr">Device Split</div>
+          <canvas id="device-chart" height="130"></canvas>
         </div>
       </div>
-      <div style="margin-bottom:12px">
-        <button class="day-btn active" onclick="loadSite(curSite,7,this)">7d</button>
-        <button class="day-btn" onclick="loadSite(curSite,30,this)">30d</button>
-        <button class="day-btn" onclick="loadSite(curSite,90,this)">90d</button>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-hdr">Top Traffic Sources</div>
+          <table>
+            <thead><tr><th>Source</th><th class="num">Visits</th><th class="num">%</th></tr></thead>
+            <tbody id="referrer-table"></tbody>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card-hdr">Top Pages</div>
+          <table>
+            <thead><tr><th>Page</th><th class="num">Visits</th></tr></thead>
+            <tbody id="page-table"></tbody>
+          </table>
+        </div>
       </div>
     </div>
 
-    <!-- SEO EDITOR TAB -->
+    <!-- ── KEYWORDS ── -->
+    <div class="tab-pane" id="tab-keywords">
+      <div class="alert alert-info">💡 <span>Keywords auto-refresh every <strong>7 hours</strong> from Google News. Fixed keywords are under your full control — the robot never overwrites them.</span></div>
+      <div class="stat-grid" id="kw-stats" style="grid-template-columns:repeat(3,1fr)"></div>
+      <div id="kw-pages-list"></div>
+    </div>
+
+    <!-- ── SEARCH TERMS ── -->
+    <div class="tab-pane" id="tab-search">
+      <div class="alert alert-grn">📈 <span>All keywords currently active across every page of this site — ranked by frequency.</span></div>
+      <div class="card">
+        <div class="card-hdr">Active Search Terms</div>
+        <div id="search-terms-list"></div>
+      </div>
+    </div>
+
+    <!-- ── SEO EDITOR ── -->
     <div class="tab-pane" id="tab-seo">
       <div class="pg-tabs" id="page-tabs"></div>
       <div id="page-editors"></div>
-      <div class="card" style="margin-top:16px">
-        <div class="card-title">Add New Page</div>
+      <div class="card">
+        <div class="card-hdr">Add Page</div>
         <div style="display:flex;gap:10px">
-          <input type="text" id="new-page-input" placeholder="e.g. about, services, blog" style="margin-bottom:0">
-          <button class="btn btn-o" onclick="addPage()">+ Add</button>
+          <input type="text" id="new-page-input" placeholder="e.g.  about   services   blog/posts" style="margin:0">
+          <button class="btn btn-pri" onclick="addPage()">＋ Add</button>
         </div>
       </div>
     </div>
 
-    <!-- INSTALL TAB -->
-    <div class="tab-pane install-tab" id="tab-install">
-      <div class="card">
-        <div class="card-title">🌐 HTML / Static Site</div>
-        <button class="copy-btn" onclick="copyCode('c-html')">Copy</button>
-        <pre id="c-html"></pre>
+    <!-- ── INSTALL ── -->
+    <div class="tab-pane" id="tab-install">
+      <div class="alert alert-grn">📁 <span><strong>Drop-in File Method:</strong> Download the pre-configured <code>manofox-seo.js</code> for this site, place it in the website's root folder, add one script tag — the site auto-appears on your dashboard instantly.</span></div>
+      <div class="fw-tabs">
+        <button class="fw-tab active" onclick="switchFw('html',this)">🌐 HTML / Static</button>
+        <button class="fw-tab" onclick="switchFw('react',this)">⚛️ React</button>
+        <button class="fw-tab" onclick="switchFw('next',this)">▲ Next.js</button>
+        <button class="fw-tab" onclick="switchFw('node',this)">🟢 Node / Express</button>
+        <button class="fw-tab" onclick="switchFw('php',this)">🐘 PHP</button>
+        <button class="fw-tab" onclick="switchFw('wp',this)">🔵 WordPress</button>
       </div>
-      <div class="card">
-        <div class="card-title">🟢 Node.js / Express</div>
-        <button class="copy-btn" onclick="copyCode('c-helper')">Copy</button>
-        <pre id="c-helper"></pre>
-        <button class="copy-btn" onclick="copyCode('c-routes')">Copy Routes</button>
-        <pre id="c-routes"></pre>
+      <div class="fw-pane active" id="fw-html">
+        <div class="card">
+          <div class="card-hdr">Step 1 — Download this file → place in website root as <code style="color:var(--grn)">manofox-seo.js</code></div>
+          <div class="alert alert-warn">📁 Save as <strong>manofox-seo.js</strong> in the same folder as your index.html. This file auto-registers your site on first load.</div>
+          <div class="code-hdr"><span class="code-lbl">manofox-seo.js</span><button class="copy-btn" onclick="copyEl('c-html-file',this)">Copy</button></div>
+          <pre id="c-html-file"></pre>
+        </div>
+        <div class="card">
+          <div class="card-hdr">Step 2 — Add this tag to every HTML page (before &lt;/body&gt;)</div>
+          <div class="code-hdr"><span class="code-lbl">Every HTML file</span><button class="copy-btn" onclick="copyEl('c-html-tag',this)">Copy</button></div>
+          <pre id="c-html-tag"></pre>
+        </div>
       </div>
-      <div class="card">
-        <div class="card-title">🐘 PHP</div>
-        <button class="copy-btn" onclick="copyCode('c-php')">Copy</button>
-        <pre id="c-php"></pre>
+      <div class="fw-pane" id="fw-react">
+        <div class="card">
+          <div class="card-hdr">React — useSEO hook (drop in src/hooks/)</div>
+          <div class="code-hdr"><span class="code-lbl">src/hooks/useSEO.js</span><button class="copy-btn" onclick="copyEl('c-react',this)">Copy</button></div>
+          <pre id="c-react"></pre>
+        </div>
       </div>
-      <div class="card">
-        <div class="card-title">⚛️ WordPress (functions.php)</div>
-        <button class="copy-btn" onclick="copyCode('c-wp')">Copy</button>
-        <pre id="c-wp"></pre>
+      <div class="fw-pane" id="fw-next">
+        <div class="card">
+          <div class="card-hdr">Next.js — App Router generateMetadata + helper</div>
+          <div class="code-hdr"><span class="code-lbl">lib/seo.js + usage</span><button class="copy-btn" onclick="copyEl('c-next',this)">Copy</button></div>
+          <pre id="c-next"></pre>
+        </div>
       </div>
-      <div class="card">
-        <div class="card-title">▲ Next.js</div>
-        <button class="copy-btn" onclick="copyCode('c-next')">Copy</button>
-        <pre id="c-next"></pre>
+      <div class="fw-pane" id="fw-node">
+        <div class="card">
+          <div class="card-hdr">Node.js / Express — getSeo helper + routes</div>
+          <div class="code-hdr"><span class="code-lbl">lib/seo.js</span><button class="copy-btn" onclick="copyEl('c-node',this)">Copy</button></div>
+          <pre id="c-node"></pre>
+        </div>
+      </div>
+      <div class="fw-pane" id="fw-php">
+        <div class="card">
+          <div class="card-hdr">PHP — getSeoData() function</div>
+          <div class="code-hdr"><span class="code-lbl">includes/seo.php</span><button class="copy-btn" onclick="copyEl('c-php',this)">Copy</button></div>
+          <pre id="c-php"></pre>
+        </div>
+      </div>
+      <div class="fw-pane" id="fw-wp">
+        <div class="card">
+          <div class="card-hdr">WordPress — functions.php snippet</div>
+          <div class="code-hdr"><span class="code-lbl">functions.php</span><button class="copy-btn" onclick="copyEl('c-wp',this)">Copy</button></div>
+          <pre id="c-wp"></pre>
+        </div>
       </div>
     </div>
 
-    <!-- HISTORY TAB -->
+    <!-- ── HISTORY ── -->
     <div class="tab-pane" id="tab-history">
       <div class="card">
-        <div class="card-title">Keyword Update History</div>
+        <div class="card-hdr">Keyword Update Log</div>
         <div id="kw-history"></div>
       </div>
     </div>
 
-    <!-- SETTINGS TAB -->
+    <!-- ── SETTINGS ── -->
     <div class="tab-pane" id="tab-settings">
       <div class="card">
-        <div class="card-title">Site Settings</div>
+        <div class="card-hdr">Site Settings</div>
         <form onsubmit="saveSettings(event)">
-          <label>Site Name</label><input type="text" id="set-name">
-          <label>Domain</label><input type="text" id="set-domain">
+          <div class="grid-2">
+            <div><label>Site Name</label><input type="text" id="set-name"></div>
+            <div><label>Domain</label><input type="text" id="set-domain" placeholder="example.com"></div>
+          </div>
           <label>Category</label>
           <select id="set-category">
             <option>education</option><option>ecommerce</option><option>technology</option>
             <option>healthcare</option><option>digitalmarketing</option><option>restaurant</option>
             <option>realestate</option><option>default</option>
           </select>
-          <button class="btn btn-o" type="submit">💾 Save Settings</button>
+          <button class="btn btn-pri" type="submit">💾 Save Settings</button>
         </form>
       </div>
-      <div class="danger">
-        <div class="danger-title">⚠️ Danger Zone</div>
-        <div style="font-size:0.83rem;color:#6b6b7e;margin-bottom:14px">Permanently deletes all data for this site.</div>
+      <div class="danger-zone">
+        <h4>⚠️ Danger Zone</h4>
+        <p>Permanently deletes this site and all its analytics, keywords, and history.</p>
         <button class="btn btn-red" onclick="deleteSite()">🗑️ Delete Site</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- NEW SITE MODAL -->
+<!-- ══════════ NEW SITE MODAL ══════════ -->
 <div class="modal" id="new-site-modal">
   <div class="modal-box">
-    <h3>+ Add New Site</h3>
-    <label>Site Name</label><input type="text" id="ns-name" placeholder="Agrim Classes">
-    <label>Domain</label><input type="text" id="ns-domain" placeholder="agrimclasses.in">
+    <h3>＋ Add Client Website</h3>
+    <div class="grid-2">
+      <div><label>Site Name *</label><input type="text" id="ns-name" placeholder="Agrim Classes"></div>
+      <div><label>Domain</label><input type="text" id="ns-domain" placeholder="agrimclasses.in"></div>
+    </div>
     <label>Category</label>
-    <select id="ns-category">
+    <select id="ns-cat">
       <option>education</option><option>ecommerce</option><option>technology</option>
       <option>healthcare</option><option>digitalmarketing</option><option>restaurant</option>
       <option>realestate</option><option>default</option>
     </select>
-    <div id="ns-err" class="err" style="display:none"></div>
-    <div style="display:flex;gap:10px;margin-top:8px">
-      <button class="btn btn-o" style="flex:1" onclick="createSite()">Create Site</button>
-      <button class="btn btn-g" onclick="closeModal()">Cancel</button>
+    <div id="ns-err" class="err-msg" style="display:none"></div>
+    <div class="modal-footer">
+      <button class="btn btn-pri" onclick="createSite()">Create Site</button>
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
     </div>
   </div>
 </div>
@@ -266,268 +533,520 @@ td{padding:8px;border-bottom:1px solid #0f0f18}
 <div class="toast" id="toast"></div>
 
 <script>
-// ─── STATE ────────────────────────────────────────────────────────────────────
-var curSite = null;
-var siteData = null;
-var trafficChart = null;
-var deviceChart  = null;
+// ─── STATE ─────────────────────────────────────────────────────────────────────
+var curSite=null,siteData=null,allSites=[],tChart=null,dChart=null,curDays=7;
 
-// ─── AUTH ─────────────────────────────────────────────────────────────────────
-async function doLogin() {
-    var pw = document.getElementById('pw-input').value;
-    var r  = await fetch('/api/auth', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({password: pw}), credentials:'include' });
-    if (r.ok) { showDashboard(); loadDashboard(); }
-    else { var e = document.getElementById('login-err'); e.style.display='block'; e.textContent='Wrong password'; }
+// ─── AUTH ──────────────────────────────────────────────────────────────────────
+async function doLogin(){
+  var pw=document.getElementById('pw-input').value;
+  var r=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pw}),credentials:'include'});
+  if(r.ok){showDashboard();loadDashboard();}
+  else{var e=document.getElementById('login-err');e.style.display='block';e.textContent='Wrong password';}
 }
-function doLogout() {
-    fetch('/api/auth', {method:'DELETE', credentials:'include'});
-    document.getElementById('dashboard-screen').style.display='none';
-    document.getElementById('login-screen').style.display='flex';
+function doLogout(){
+  fetch('/api/auth',{method:'DELETE',credentials:'include'});
+  show('login-screen');hide('dashboard-screen');hide('site-screen');
 }
 
-// ─── SCREENS ──────────────────────────────────────────────────────────────────
-function showDashboard() {
-    document.getElementById('login-screen').style.display='none';
-    document.getElementById('dashboard-screen').style.display='block';
-    document.getElementById('site-screen').style.display='none';
-    loadDashboard();
+// ─── HELPERS ───────────────────────────────────────────────────────────────────
+function show(id){document.getElementById(id).style.display='block'}
+function hide(id){document.getElementById(id).style.display='none'}
+function flex(id){document.getElementById(id).style.display='flex'}
+function fmt(n){return n>=1000000?(n/1000000).toFixed(1)+'M':n>=1000?(n/1000).toFixed(1)+'k':String(n)}
+
+// ─── SCREENS ───────────────────────────────────────────────────────────────────
+function showDashboard(){
+  flex('dashboard-screen');hide('site-screen');hide('login-screen');
+  loadDashboard();
 }
-function showSite(siteId) {
-    curSite = siteId;
-    document.getElementById('dashboard-screen').style.display='none';
-    document.getElementById('site-screen').style.display='block';
-    loadSite(siteId, 7);
+function showSite(sid){
+  curSite=sid;
+  hide('dashboard-screen');show('site-screen');
+  // reset tabs
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-analytics').classList.add('active');
+  document.querySelectorAll('.tab')[0].classList.add('active');
+  curDays=7;
+  loadSite(sid,7);
 }
 
-// ─── DASHBOARD ────────────────────────────────────────────────────────────────
-async function loadDashboard() {
-    var r = await fetch('/api/dashboard?action=sites', {credentials:'include'});
-    if (!r.ok) { document.getElementById('login-screen').style.display='flex'; document.getElementById('dashboard-screen').style.display='none'; return; }
-    var d = await r.json();
-    document.getElementById('dash-stats').innerHTML =
-        statCard('Total Sites', d.sites.length, 'Active sites') +
-        statCard('Visits (7d)', d.totalVisits, 'Across all sites') +
-        statCard('Auto Sites', d.sites.filter(s=>s.autoRegistered).length, 'Auto-registered') +
-        statCard('Pages', d.sites.reduce((a,s)=>a+(s.seoData?1:0),0), 'With SEO data');
-    document.getElementById('site-grid').innerHTML = d.sites.map(s =>
-        '<div class="site-card" onclick="showSite(\''+s.siteId+'\')">' +
-        '<div class="site-name">'+s.name+'</div>' +
-        '<div class="site-domain">'+( s.domain||'No domain')+'</div>' +
-        '<div style="display:flex;justify-content:space-between;align-items:center">' +
-        '<span class="site-badge">'+s.category+'</span>' +
-        '<span style="font-size:0.75rem;color:#6b6b7e">'+s.visits7d+' visits</span></div></div>'
-    ).join('');
+// ─── DASHBOARD ─────────────────────────────────────────────────────────────────
+async function loadDashboard(){
+  var r=await fetch('/api/dashboard?action=sites',{credentials:'include'});
+  if(!r.ok){flex('login-screen');hide('dashboard-screen');return;}
+  var d=await r.json();
+  allSites=d.sites;
+  var totalKw=d.sites.reduce((a,s)=>a+(s.kwCount||0),0);
+  document.getElementById('dash-stats').innerHTML=
+    sc('Total Sites',d.sites.length,'Managed websites','badge-neu')+
+    sc('Visits 7d',fmt(d.totalVisits||0),'All sites combined','badge-up')+
+    sc('Total Keywords',fmt(totalKw),'Auto-managed','badge-up')+
+    sc('Auto-registered',d.sites.filter(s=>s.autoRegistered).length,'Via drop-in file','badge-neu');
+  updateCronBadge(d.lastCronRun);
+  renderGrid(d.sites);
 }
-function statCard(label,val,sub){return '<div class="stat-card"><div class="stat-label">'+label+'</div><div class="stat-value">'+val+'</div><div class="stat-sub">'+sub+'</div></div>'}
+function sc(lbl,val,sub,bc){
+  return '<div class="stat-card"><div class="stat-lbl">'+lbl+'</div><div class="stat-val">'+val+'</div><div class="stat-sub">'+sub+'</div></div>';
+}
+function updateCronBadge(lastRun){
+  var el=document.getElementById('last-run-badge');
+  var nl=document.getElementById('next-update-lbl');
+  if(!lastRun){el.textContent='Never run';nl.textContent='Runs in ~7h';return;}
+  var diff=Date.now()-new Date(lastRun).getTime();
+  var h=Math.floor(diff/3600000),m=Math.floor((diff%3600000)/60000);
+  el.textContent='Last update: '+(h>0?h+'h ':'')+m+'m ago';
+  var nextH=Math.max(0,7-h);
+  nl.textContent='Next update ~'+nextH+'h';
+  el.style.color=diff<7.5*3600000?'var(--grn)':'var(--yel)';
+}
+function renderGrid(sites){
+  var g=document.getElementById('site-grid');
+  if(!sites.length){g.innerHTML='<div style="color:var(--tx3);padding:20px;grid-column:1/-1">No sites yet. Click ＋ Add Site to get started.</div>';return;}
+  var ico={education:'📚',ecommerce:'🛒',technology:'💻',healthcare:'🏥',digitalmarketing:'📣',restaurant:'🍽️',realestate:'🏠'};
+  g.innerHTML=sites.map(s=>{
+    var em=ico[s.category]||'🌐';
+    return '<div class="site-card" onclick="showSite(\''+s.siteId+'\')">'+
+    '<div class="site-card-top"><div class="site-ico">'+em+'</div><div class="site-live"><div class="site-live-dot"></div>active</div></div>'+
+    '<div class="site-name">'+s.name+'</div>'+
+    '<div class="site-domain">'+(s.domain||'no domain')+'</div>'+
+    '<div class="site-footer"><span class="cat-pill cat-'+(s.category||'default')+'">'+( s.category||'default')+'</span><span class="site-visits"><span>'+fmt(s.visits7d||0)+'</span> visits</span></div></div>';
+  }).join('');
+}
+function filterSites(){
+  var cat=document.getElementById('cat-filter').value;
+  var q=document.getElementById('search-filter').value.toLowerCase();
+  renderGrid(allSites.filter(s=>{
+    return(!cat||s.category===cat)&&(!q||s.name.toLowerCase().includes(q)||(s.domain||'').toLowerCase().includes(q));
+  }));
+}
 
-// ─── SITE DETAIL ──────────────────────────────────────────────────────────────
-async function loadSite(siteId, days, dayBtn) {
-    if (dayBtn) { document.querySelectorAll('.day-btn').forEach(b=>b.classList.remove('active')); dayBtn.classList.add('active'); }
-    var r = await fetch('/api/dashboard?action=site&siteId='+siteId+'&days='+(days||7), {credentials:'include'});
-    var d = await r.json();
-    siteData = d;
+// ─── SITE DETAIL ───────────────────────────────────────────────────────────────
+async function loadSite(sid,days){
+  var r=await fetch('/api/dashboard?action=site&siteId='+sid+'&days='+days,{credentials:'include'});
+  var d=await r.json(); siteData=d;
+  var ico={education:'📚',ecommerce:'🛒',technology:'💻',healthcare:'🏥',digitalmarketing:'📣',restaurant:'🍽️',realestate:'🏠'};
+  var em=ico[d.site.category]||'🌐';
+  document.getElementById('s-icon').textContent=em;
+  document.getElementById('s-title').textContent=d.site.name;
+  document.getElementById('s-domain').textContent=d.site.domain||'no domain set';
+  var cb=document.getElementById('s-cat-badge'); cb.textContent=d.site.category||'default'; cb.className='cat-pill cat-'+(d.site.category||'default');
+  var ab=document.getElementById('s-auto-badge'); ab.innerHTML=d.site.autoRegistered?'<span class="auto-badge">⚡ Auto-registered</span>':'';
 
-    document.getElementById('site-title').textContent = d.site.name;
-    document.getElementById('site-sub').innerHTML = '🌐 <span style="color:#ff9a3c">'+( d.site.domain||'No domain')+'</span> &nbsp;·&nbsp; Category: <span style="color:#ff9a3c">'+d.site.category+'</span>';
+  // Stats
+  var mob=d.deviceStats.find(x=>x._id==='Mobile')?.count||0;
+  var desk=d.deviceStats.find(x=>x._id==='Desktop')?.count||0;
+  var kwTotal=d.seoPages.reduce((a,p)=>a+((p.keywords||'').split(',').filter(Boolean).length),0);
+  document.getElementById('site-stats').innerHTML=
+    sc('Total Visits',fmt(d.totalVisits),days+'d period','')+
+    sc('Mobile',fmt(mob),'Mobile sessions','')+
+    sc('Desktop',fmt(desk),'Desktop sessions','')+
+    sc('Keywords',kwTotal,d.seoPages.length+' pages tracked','');
 
-    // Stats
-    var mobile = d.deviceStats.find(x=>x._id==='Mobile')?.count||0;
-    var desktop= d.deviceStats.find(x=>x._id==='Desktop')?.count||0;
-    document.getElementById('site-stats').innerHTML =
-        statCard('Total Visits', d.totalVisits, days+'d period') +
-        statCard('Mobile', mobile, 'Mobile visits') +
-        statCard('Desktop', desktop, 'Desktop visits') +
-        statCard('Pages', d.seoPages.length, 'SEO pages');
+  // Charts
+  if(tChart)tChart.destroy(); if(dChart)dChart.destroy();
+  var cOpts={responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#5c5a78',font:{size:10}},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{color:'#5c5a78',font:{size:10}},grid:{color:'rgba(255,255,255,.04)'}}}};
+  tChart=new Chart(document.getElementById('traffic-chart'),{type:'line',data:{labels:d.dailyStats.map(x=>x._id),datasets:[{data:d.dailyStats.map(x=>x.count),borderColor:'#ff4500',tension:.4,fill:true,backgroundColor:'rgba(255,69,0,.08)',borderWidth:2,pointBackgroundColor:'#ff4500',pointRadius:3}]},options:cOpts});
+  dChart=new Chart(document.getElementById('device-chart'),{type:'doughnut',data:{labels:d.deviceStats.map(x=>x._id||'Unknown'),datasets:[{data:d.deviceStats.map(x=>x.count),backgroundColor:['#ff4500','#4d8fff','#00d4a0','#a855f7'],borderWidth:0}]},options:{responsive:true,plugins:{legend:{labels:{color:'#9896b4',font:{size:11},boxWidth:12}}}}});
 
-    // Charts
-    if (trafficChart) trafficChart.destroy();
-    if (deviceChart)  deviceChart.destroy();
-    trafficChart = new Chart(document.getElementById('traffic-chart'), {
-        type:'line', data:{ labels: d.dailyStats.map(x=>x._id), datasets:[{label:'Visits', data:d.dailyStats.map(x=>x.count), borderColor:'#ff5c00', tension:0.4, fill:true, backgroundColor:'rgba(255,92,0,0.1)'}] },
-        options:{ plugins:{legend:{display:false}}, scales:{ x:{ticks:{color:'#6b6b7e',font:{size:10}}}, y:{ticks:{color:'#6b6b7e',font:{size:10}}} } }
+  // Tables
+  var tot=d.referrerStats.reduce((a,x)=>a+x.count,0)||1;
+  document.getElementById('referrer-table').innerHTML=d.referrerStats.slice(0,8).map(x=>'<tr><td>'+(x._id||'Direct')+'</td><td class="num">'+fmt(x.count)+'</td><td class="num" style="color:var(--tx3)">'+Math.round(x.count/tot*100)+'%</td></tr>').join('');
+  document.getElementById('page-table').innerHTML=d.pageStats.slice(0,8).map(x=>'<tr><td>/'+(x._id||'home')+'</td><td class="num">'+fmt(x.count)+'</td></tr>').join('');
+
+  buildKeywordsTab(d.seoPages);
+  buildSearchTerms(d.seoPages);
+  buildSeoEditor(d.seoPages,sid);
+  buildInstall(d.site,d.hubUrl);
+  buildHistory(d.keywordHistory);
+  document.getElementById('set-name').value=d.site.name;
+  document.getElementById('set-domain').value=d.site.domain||'';
+  document.getElementById('set-category').value=d.site.category||'default';
+}
+function reloadSite(days,btn){
+  curDays=days;
+  document.querySelectorAll('.day-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  loadSite(curSite,days);
+}
+
+// ─── KEYWORDS TAB ──────────────────────────────────────────────────────────────
+function buildKeywordsTab(pages){
+  var tf=pages.reduce((a,p)=>a+((p.fixedKeywords||'').split(',').filter(Boolean).length),0);
+  var ts=pages.reduce((a,p)=>a+((p.shortTailKeywords||'').split(',').filter(Boolean).length),0);
+  var tl=pages.reduce((a,p)=>a+((p.longTailKeywords||'').split(',').filter(Boolean).length),0);
+  document.getElementById('kw-stats').innerHTML=
+    sc('Fixed Keywords',tf,'Your control · 10 per page','')+
+    sc('Short Tail Auto',ts,'1-3 words · high volume','')+
+    sc('Long Tail Auto',tl,'4-8 words · high intent','');
+  document.getElementById('kw-pages-list').innerHTML=pages.map(p=>{
+    var fixed=(p.fixedKeywords||'').split(',').map(k=>k.trim()).filter(Boolean);
+    var short=(p.shortTailKeywords||'').split(',').map(k=>k.trim()).filter(Boolean);
+    var long=(p.longTailKeywords||'').split(',').map(k=>k.trim()).filter(Boolean);
+    return '<div class="card"><div class="card-hdr"><span>/'+p.page+'</span><span style="color:var(--tx3);font-size:.67rem">Updated: '+new Date(p.updatedAt).toLocaleDateString('en-IN')+'</span></div>'+
+    '<div class="kw-zone"><div class="kw-zone-lbl kw-lbl-fixed">📌 Fixed Keywords ('+fixed.length+'/10 — you control these)</div>'+
+    '<div class="kw-box">'+(fixed.length?fixed.map(k=>'<span class="kw-chip chip-fixed">'+k+'</span>').join(''):'<span style="color:var(--tx3)">None set — edit in SEO Editor</span>')+'</div></div>'+
+    '<div class="kw-zone"><div class="kw-zone-lbl kw-lbl-short">📊 Short Tail Auto ('+short.length+' — 1-3 words)</div>'+
+    '<div class="kw-box short">'+(short.length?short.map(k=>'<span class="kw-chip chip-short">'+k+'</span>').join(''):'<span style="color:var(--tx3)">Click ⚡ Update to fetch trending keywords</span>')+'</div></div>'+
+    '<div class="kw-zone"><div class="kw-zone-lbl kw-lbl-long">🎯 Long Tail Auto ('+long.length+' — 4-8 words)</div>'+
+    '<div class="kw-box long">'+(long.length?long.map(k=>'<span class="kw-chip chip-long">'+k+'</span>').join(''):'<span style="color:var(--tx3)">Click ⚡ Update to fetch trending keywords</span>')+'</div></div></div>';
+  }).join('');
+}
+
+// ─── SEARCH TERMS TAB ──────────────────────────────────────────────────────────
+function buildSearchTerms(pages){
+  var map={};
+  pages.forEach(p=>{
+    (p.keywords||'').split(',').map(k=>k.trim()).filter(Boolean).forEach(k=>{
+      map[k]=(map[k]||0)+1;
     });
-    var devLabels = d.deviceStats.map(x=>x._id||'Unknown');
-    var devData   = d.deviceStats.map(x=>x.count);
-    deviceChart = new Chart(document.getElementById('device-chart'), {
-        type:'doughnut', data:{ labels:devLabels, datasets:[{data:devData, backgroundColor:['#ff5c00','#ff9a3c','#ffcc00']}] },
-        options:{ plugins:{legend:{labels:{color:'#e8e8f0',font:{size:11}}}} }
+  });
+  var sorted=Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,30);
+  var max=sorted[0]?.[1]||1;
+  var html=sorted.map(([kw,cnt])=>{
+    var pct=Math.round(cnt/max*100);
+    return '<div class="term-row"><span class="term-kw">'+kw+'</span><div class="term-track"><div class="term-fill" style="width:'+pct+'%"></div></div><span class="term-count">×'+cnt+'</span></div>';
+  }).join('');
+  document.getElementById('search-terms-list').innerHTML=html||'<div style="color:var(--tx3);padding:8px">No keywords yet — run a keyword update first.</div>';
+}
+
+// ─── SEO EDITOR ────────────────────────────────────────────────────────────────
+function buildSeoEditor(pages,siteId){
+  document.getElementById('page-tabs').innerHTML=pages.map((p,i)=>'<button class="pg-tab'+(i===0?' active':'')+'" onclick="switchPg(\'ed-'+p.page+'\',this)">/'+p.page+'</button>').join('');
+  document.getElementById('page-editors').innerHTML=pages.map((p,i)=>
+    '<div class="page-ed card'+(i===0?' active':'')+'" id="ed-'+p.page+'">'+
+    '<div class="card-hdr"><span>/'+p.page+'</span><span>Updated: '+new Date(p.updatedAt).toLocaleDateString('en-IN')+'</span></div>'+
+    '<form onsubmit="saveSeo(event,\''+siteId+'\',\''+p.page+'\')">'+
+    '<div class="grid-2"><div><label>Page Title (60 chars)</label><input type="text" name="title" value="'+(p.title||'')+'" maxlength="70"></div>'+
+    '<div><label>Robots</label><select name="robots">'+['index, follow','noindex, nofollow','index, nofollow','noindex, follow'].map(v=>'<option'+(p.robots===v?' selected':'')+'>'+v+'</option>').join('')+'</select></div></div>'+
+    '<label>Meta Description (160 chars)</label><textarea name="description" rows="2" maxlength="200">'+(p.description||'')+'</textarea>'+
+    '<div class="kw-zone"><div class="kw-zone-lbl kw-lbl-fixed">📌 Fixed Keywords — you edit these (10 max, never overwritten by robot)</div>'+
+    '<input type="text" name="fixedKeywords" value="'+(p.fixedKeywords||'')+'" placeholder="keyword1, keyword2, … (10 max)"></div>'+
+    '<div class="kw-zone"><div class="kw-zone-lbl kw-lbl-short">📊 Short Tail — auto (read only)</div>'+
+    '<div class="kw-box short" style="margin-bottom:0">'+(p.shortTailKeywords||'<span style="color:var(--tx3)">Will appear after first keyword update</span>')+'</div></div>'+
+    '<div class="kw-zone" style="margin-top:10px"><div class="kw-zone-lbl kw-lbl-long">🎯 Long Tail — auto (read only)</div>'+
+    '<div class="kw-box long" style="margin-bottom:0">'+(p.longTailKeywords||'<span style="color:var(--tx3)">Will appear after first keyword update</span>')+'</div></div>'+
+    '<br><button class="btn btn-pri" type="submit">💾 Save Page</button></form></div>'
+  ).join('');
+}
+function switchPg(id,btn){
+  document.querySelectorAll('.page-ed').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.pg-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');btn.classList.add('active');
+}
+async function saveSeo(e,sid,page){
+  e.preventDefault();
+  var f=new FormData(e.target);
+  var r=await fetch('/api/dashboard?action=update-seo&siteId='+sid,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({page,title:f.get('title'),description:f.get('description'),robots:f.get('robots'),fixedKeywords:f.get('fixedKeywords')})});
+  if(r.ok)toast('Page saved!','ok'); else toast('Save failed','err');
+}
+async function addPage(){
+  var page=document.getElementById('new-page-input').value.trim().toLowerCase().replace(/[^a-z0-9\/\-]/g,'');
+  if(!page)return;
+  await fetch('/api/dashboard?action=add-page&siteId='+curSite,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({page})});
+  document.getElementById('new-page-input').value='';
+  loadSite(curSite,curDays); toast('Page added!','ok');
+}
+
+// ─── INSTALL TAB ───────────────────────────────────────────────────────────────
+function buildInstall(site,hubUrl){
+  var H=hubUrl,S=site.siteId,N=site.name;
+
+  document.getElementById('c-html-file').textContent=
+`/* ============================================================
+ * Manofox SEO Hub v4 — Drop-in Tracking & SEO File
+ * Site : ${N}
+ * ID   : ${S}
+ *
+ * HOW IT WORKS:
+ *  1. Place this file in your website's ROOT folder
+ *  2. Add  <script src="/manofox-seo.js" defer></script>  before </body>
+ *  3. Your site AUTOMATICALLY appears on the Manofox Dashboard
+ *  4. SEO meta tags are injected on every page visit
+ *  5. Traffic, devices, referrers are tracked silently
+ * ============================================================ */
+(function(){
+  var SITE_ID=${JSON.stringify(S)};
+  var HUB    =${JSON.stringify(H)};
+  if(!SITE_ID||!HUB)return;
+
+  var rawPath=window.location.pathname;
+  var page=rawPath.replace(/^\\//, '').replace(/\\/$/, '').replace(/\\.html?$/, '')||'home';
+  if(page==='index'||page==='')page='home';
+
+  /* ── Inject SEO meta tags ── */
+  fetch(HUB+'/api/seo/'+encodeURIComponent(SITE_ID)+'?page='+encodeURIComponent(page))
+    .then(function(r){return r.ok?r.json():{};})
+    .then(function(seo){
+      if(seo.title)document.title=seo.title;
+      function setMeta(name,val,isProp){
+        if(!val)return;
+        var attr=isProp?'property':'name';
+        var el=document.querySelector('meta['+attr+'="'+name+'"]');
+        if(!el){el=document.createElement('meta');el.setAttribute(attr,name);document.head.appendChild(el);}
+        el.setAttribute('content',val);
+      }
+      setMeta('description',   seo.description);
+      setMeta('keywords',      seo.keywords);
+      setMeta('robots',        seo.robots||'index, follow');
+      setMeta('og:title',      seo.ogTitle||seo.title,true);
+      setMeta('og:description',seo.ogDescription||seo.description,true);
+      setMeta('og:type',       'website',true);
+      /* Schema.org JSON-LD for rich results */
+      if(seo.title){
+        var s=document.createElement('script');
+        s.type='application/ld+json';
+        s.textContent=JSON.stringify({'@context':'https://schema.org','@type':'WebPage','name':seo.title,'description':seo.description||''});
+        document.head.appendChild(s);
+      }
+    }).catch(function(){});
+
+  /* ── Track visit ── */
+  try{
+    var ref=document.referrer||'Direct';
+    var dev=/mobile|android|iphone|ipad/i.test(navigator.userAgent)?'Mobile':'Desktop';
+    if(ref&&ref.includes(window.location.hostname))ref='Internal';
+    fetch(HUB+'/api/track',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({siteId:SITE_ID,page:page,referrer:ref,device:dev}),
+      keepalive:true
+    }).catch(function(){});
+  }catch(e){}
+})();`;
+
+  document.getElementById('c-html-tag').textContent=
+`<!-- Add before </body> on every HTML page -->
+<script src="/manofox-seo.js" defer><\/script>`;
+
+  document.getElementById('c-react').textContent=
+`// src/hooks/useSEO.js
+import { useEffect } from 'react';
+
+const HUB     = '${H}';
+const SITE_ID = '${S}';
+
+export function useSEO(page = 'home') {
+  useEffect(() => {
+    fetch(\`\${HUB}/api/seo/\${SITE_ID}?page=\${page}\`)
+      .then(r => r.json())
+      .then(seo => {
+        if (seo.title) document.title = seo.title;
+        const set = (name, val, isProp) => {
+          if (!val) return;
+          const attr = isProp ? 'property' : 'name';
+          let el = document.querySelector(\`meta[\${attr}="\${name}"]\`);
+          if (!el) { el = document.createElement('meta'); el.setAttribute(attr, name); document.head.appendChild(el); }
+          el.content = val;
+        };
+        set('description',    seo.description);
+        set('keywords',       seo.keywords);
+        set('robots',         seo.robots || 'index, follow');
+        set('og:title',       seo.title,       true);
+        set('og:description', seo.description, true);
+      }).catch(() => {});
+    // Track visit
+    fetch(\`\${HUB}/api/track\`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ siteId: SITE_ID, page, referrer: document.referrer||'Direct', device: /mobile/i.test(navigator.userAgent)?'Mobile':'Desktop' }),
+      keepalive: true
+    }).catch(() => {});
+  }, [page]);
+}
+
+// Usage in any component:
+// import { useSEO } from '../hooks/useSEO';
+// function HomePage() { useSEO('home'); return <main>…</main>; }`;
+
+  document.getElementById('c-next').textContent=
+`// lib/seo.js
+const HUB     = '${H}';
+const SITE_ID = '${S}';
+
+export async function getSeo(page = 'home') {
+  try {
+    const r = await fetch(\`\${HUB}/api/seo/\${SITE_ID}?page=\${page}\`, {
+      next: { revalidate: 1800 }  // ISR — revalidate every 30 min
     });
-
-    // Tables
-    document.getElementById('referrer-table').innerHTML = d.referrerStats.map(x=>'<tr><td>'+(x._id||'Direct')+'</td><td class="num">'+x.count+'</td></tr>').join('');
-    document.getElementById('page-table').innerHTML     = d.pageStats.map(x=>'<tr><td>/'+( x._id||'home')+'</td><td class="num">'+x.count+'</td></tr>').join('');
-
-    // SEO Editor
-    buildSeoEditor(d.seoPages, siteId);
-
-    // Install tab
-    buildInstallTab(d.site, d.hubUrl);
-
-    // History
-    document.getElementById('kw-history').innerHTML = d.keywordHistory.map(log =>
-        '<div style="padding:12px;border-bottom:1px solid #1e1e2a">' +
-        '<div style="display:flex;justify-content:space-between;margin-bottom:6px">' +
-        '<span style="font-size:0.75rem;color:#6b6b7e">/'+(log.page||'home')+'</span>' +
-        '<span class="src-badge src-'+log.source+'">'+log.source+'</span></div>' +
-        '<div style="font-size:0.78rem;color:#e8e8f0">'+( log.keywords||'').substring(0,120)+'...</div>' +
-        '<div style="font-size:0.7rem;color:#6b6b7e;margin-top:4px">'+new Date(log.date).toLocaleString('en-IN')+'</div></div>'
-    ).join('') || '<div style="color:#6b6b7e;padding:12px">No history yet</div>';
-
-    // Settings
-    document.getElementById('set-name').value     = d.site.name;
-    document.getElementById('set-domain').value   = d.site.domain||'';
-    document.getElementById('set-category').value = d.site.category||'default';
+    return r.ok ? await r.json() : {};
+  } catch { return {}; }
 }
 
-// ─── SEO EDITOR ───────────────────────────────────────────────────────────────
-function buildSeoEditor(pages, siteId) {
-    var tabs = document.getElementById('page-tabs');
-    var eds  = document.getElementById('page-editors');
-    tabs.innerHTML = pages.map((p,i) => '<button class="pg-tab'+(i===0?' active':'') +'" onclick="switchPage(\'ed-'+p.page+'\',this)">/' +p.page+'</button>').join('');
-    eds.innerHTML  = pages.map((p,i) => {
-        var fixed    = p.fixedKeywords    || '';
-        var trending = p.trendingKeywords || '';
-        return '<div class="page-ed card '+(i===0?'active':'') +'" id="ed-'+p.page+'">' +
-        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">' +
-        '<span style="font-weight:700">/'+p.page+'</span>' +
-        '<span style="font-size:0.72rem;color:#6b6b7e">Updated: '+new Date(p.updatedAt).toLocaleDateString('en-IN')+'</span></div>' +
-        '<form onsubmit="saveSeo(event,\''+siteId+'\',\''+p.page+'\')">' +
-        '<label>Title</label><input type="text" name="title" value="'+(p.title||'')+'" maxlength="70">' +
-        '<label>Description</label><textarea name="description" rows="3" maxlength="200">'+(p.description||'')+'</textarea>' +
-        '<label>Keywords (Auto-updated by Robot)</label>' +
-        '<div style="margin-bottom:6px"><label style="font-size:0.72rem;color:#6b6b7e;font-weight:700">📌 FIXED KEYWORDS (10 max — you edit these)</label>' +
-        '<input type="text" name="fixedKeywords" value="'+(p.fixedKeywords||'')+'" placeholder="keyword1, keyword2, ... (10 max)" style="margin-bottom:8px"></div>' +
-        '<div class="kw-box" style="margin-bottom:6px">' +
-        '<div style="font-size:0.68rem;color:#6b9fff;margin-bottom:4px">📊 SHORT TAIL (auto — 1-3 words, high volume)</div>' +
-        '<div style="color:#60a5fa">'+(p.shortTailKeywords||'Not generated yet')+'</div></div>' +
-        '<div class="kw-box">' +
-        '<div style="font-size:0.68rem;color:#00e88f;margin-bottom:4px">🎯 LONG TAIL (auto — 4-8 words, high intent)</div>' +
-        '<div style="color:#00e88f">'+(p.longTailKeywords||'Not generated yet')+'</div></div>' +
-        '<label>Robots</label><select name="robots">' +
-        ['index, follow','noindex, nofollow','index, nofollow','noindex, follow'].map(v=>'<option'+(p.robots===v?' selected':'')+'>'+v+'</option>').join('') +
-        '</select>' +
-        '<button class="btn btn-o" type="submit">💾 Save</button></form></div>';
-    }).join('');
-}
-function switchPage(id, btn) {
-    document.querySelectorAll('.page-ed').forEach(e=>e.classList.remove('active'));
-    document.querySelectorAll('.pg-tab').forEach(b=>b.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    btn.classList.add('active');
-}
-async function saveSeo(e, siteId, page) {
-    e.preventDefault();
-    var f = new FormData(e.target);
-    await fetch('/api/dashboard?action=update-seo&siteId='+siteId, {
-        method:'POST', credentials:'include', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ page, title:f.get('title'), description:f.get('description'), robots:f.get('robots'), fixedKeywords:f.get('fixedKeywords') })
-    });
-    toast('Saved!');
-}
-async function addPage() {
-    var page = document.getElementById('new-page-input').value.trim().toLowerCase().replace(/[^a-z0-9-]/g,'');
-    if (!page) return;
-    await fetch('/api/dashboard?action=add-page&siteId='+curSite, {
-        method:'POST', credentials:'include', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({page})
-    });
-    document.getElementById('new-page-input').value = '';
-    loadSite(curSite, 7);
-    toast('Page added!');
+// ── App Router usage (app/page.js) ─────────────────────────────────
+import { getSeo } from '@/lib/seo';
+
+export async function generateMetadata() {
+  const seo = await getSeo('home');
+  return {
+    title:       seo.title       || '${N}',
+    description: seo.description || '',
+    keywords:    seo.keywords,
+    robots:      seo.robots      || 'index, follow',
+    openGraph:   { title: seo.ogTitle || seo.title, description: seo.ogDescription || seo.description },
+  };
 }
 
-// ─── INSTALL TAB ──────────────────────────────────────────────────────────────
-function buildInstallTab(site, hubUrl) {
-    var HUB = hubUrl;
-    var SID = site.siteId;
-    var NM  = site.name;
+// ── Pages Router (pages/index.js) ────────────────────────────────────
+export async function getServerSideProps() {
+  return { props: { seo: await getSeo('home') } };
+}`;
 
-    document.getElementById('c-html').textContent =
-        '<!-- Add before </body> on every page -->\n<script src="'+HUB+'/api/seo.js?site='+SID+'" defer><\/script>';
+  document.getElementById('c-node').textContent=
+`// lib/seo.js — Node.js / Express helper
+const HUB     = '${H}';
+const SITE_ID = '${S}';
 
-    document.getElementById('c-helper').textContent =
-        "const SEO_HUB = '"+HUB+"';\n\nasync function getSeo(page) {\n    try {\n        const r = await fetch(SEO_HUB + '/api/seo/"+SID+"?page=' + (page||'home'));\n        return await r.json();\n    } catch(e) {\n        return { title: '"+NM+"', description: 'Welcome', keywords: 'services', robots: 'index, follow' };\n    }\n}";
-
-    document.getElementById('c-routes').textContent =
-        "app.get('/', async (req, res) => {\n    const seo = await getSeo('home');\n    res.render('index', { seo });\n});\n\napp.get('/about', async (req, res) => {\n    const seo = await getSeo('about');\n    res.render('about', { seo });\n});";
-
-    document.getElementById('c-php').textContent =
-        "<?php\nfunction getSeoData($page) {\n    $url = '"+HUB+"/api/seo/"+SID+"?page=' . $page;\n    $ch  = curl_init();\n    curl_setopt($ch, CURLOPT_URL, $url);\n    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);\n    curl_setopt($ch, CURLOPT_TIMEOUT, 5);\n    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);\n    $result = curl_exec($ch);\n    curl_close($ch);\n    return $result ? json_decode($result, true) : [];\n}\n$seo = getSeoData('home'); // change per page\n?>\n\n<title><?= $seo['title'] ?? '"+NM+"' ?></title>\n<meta name=\"description\" content=\"<?= $seo['description'] ?? 'Welcome' ?>\">\n<meta name=\"keywords\" content=\"<?= $seo['keywords'] ?? 'services' ?>\">\n<meta name=\"robots\" content=\"<?= $seo['robots'] ?? 'index, follow' ?>\">";
-
-    document.getElementById('c-wp').textContent =
-        "// Add to functions.php\ndefine('MFOX_HUB', '"+HUB+"');\ndefine('MFOX_SITE', '"+SID+"');\n\nfunction mfox_get_slug() {\n    global $post;\n    if (is_front_page() || is_home()) return 'home';\n    if (is_singular()) return $post ? $post->post_name : 'home';\n    if (is_404()) return '404';\n    return 'home';\n}\nfunction mfox_head() {\n    $seo = json_decode(file_get_contents(MFOX_HUB.'/api/seo/'.MFOX_SITE.'?page='.mfox_get_slug()), true) ?: [];\n    if (!empty($seo['title']))       echo '<title>'.esc_html($seo['title']).'</title>'.\"\\n\";\n    if (!empty($seo['description'])) echo '<meta name=\"description\" content=\"'.esc_attr($seo['description']).'\">'.\"\\n\";\n    if (!empty($seo['keywords']))    echo '<meta name=\"keywords\" content=\"'.esc_attr($seo['keywords']).'\">'.\"\\n\";\n}\nadd_action('wp_head', 'mfox_head', 1);\nfunction mfox_footer() {\n    echo '<script src=\"'.MFOX_HUB.'/api/seo.js?site='.MFOX_SITE.'\" defer><\\/script>'.\"\\n\";\n}\nadd_action('wp_footer', 'mfox_footer');";
-
-    document.getElementById('c-next').textContent =
-        "// lib/seo.js\nexport async function getSeo(page = 'home') {\n    try {\n        const r = await fetch('"+HUB+"/api/seo/"+SID+"?page=' + page, { next: { revalidate: 1800 } });\n        return await r.json();\n    } catch { return {}; }\n}\n\n// In any page component:\nexport async function getServerSideProps() {\n    const seo = await getSeo('home');\n    return { props: { seo } };\n}";
+async function getSeo(page = 'home') {
+  try {
+    const r = await fetch(\`\${HUB}/api/seo/\${SITE_ID}?page=\${page}\`);
+    return r.ok ? await r.json() : {};
+  } catch { return {}; }
 }
-function copyCode(id) {
-    navigator.clipboard.writeText(document.getElementById(id).textContent);
-    toast('Copied!');
+module.exports = { getSeo };
+
+// ── Express route usage ───────────────────────────────────────────────
+const { getSeo } = require('./lib/seo');
+
+app.get('/', async (req, res) => {
+  const seo = await getSeo('home');
+  res.render('index', { seo });
+});
+
+// ── EJS template ─────────────────────────────────────────────────────
+// <title><%- seo.title || '${N}' %></title>
+// <meta name="description" content="<%- seo.description %>">
+// <meta name="keywords"    content="<%- seo.keywords %>">
+// <meta name="robots"      content="<%- seo.robots %>">`;
+
+  document.getElementById('c-php').textContent=
+`<?php
+// includes/seo.php
+function getManofoxSeo(string $page = 'home'): array {
+    $url = '${H}/api/seo/${S}?page=' . urlencode($page);
+    $ch  = curl_init();
+    curl_setopt_array($ch, [
+        CURLOPT_URL            => $url,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT        => 5,
+        CURLOPT_SSL_VERIFYPEER => false,
+    ]);
+    $result = curl_exec($ch);
+    curl_close($ch);
+    return $result ? (json_decode($result, true) ?? []) : [];
+}
+$seo = getManofoxSeo('home'); // change per page
+?>
+
+<title><?= htmlspecialchars($seo['title']       ?? '${N}') ?></title>
+<meta name="description" content="<?= htmlspecialchars($seo['description'] ?? '') ?>">
+<meta name="keywords"    content="<?= htmlspecialchars($seo['keywords']    ?? '') ?>">
+<meta name="robots"      content="<?= htmlspecialchars($seo['robots']      ?? 'index, follow') ?>">`;
+
+  document.getElementById('c-wp').textContent=
+`// Add to functions.php
+define('MFOX_HUB',  '${H}');
+define('MFOX_SITE', '${S}');
+
+function mfox_slug(): string {
+    global $post;
+    if (is_front_page() || is_home())  return 'home';
+    if (is_singular() && $post)        return $post->post_name;
+    if (is_post_type_archive())        return get_post_type();
+    if (is_404())                      return '404';
+    return 'home';
+}
+function mfox_head(): void {
+    $json = @file_get_contents(MFOX_HUB . '/api/seo/' . MFOX_SITE . '?page=' . mfox_slug());
+    $seo  = $json ? (json_decode($json, true) ?? []) : [];
+    if (!empty($seo['title']))       echo '<title>'      . esc_html($seo['title'])       . "</title>\\n";
+    if (!empty($seo['description'])) echo '<meta name="description" content="' . esc_attr($seo['description']) . "\" />\\n";
+    if (!empty($seo['keywords']))    echo '<meta name="keywords"    content="' . esc_attr($seo['keywords'])    . "\" />\\n";
+    if (!empty($seo['robots']))      echo '<meta name="robots"      content="' . esc_attr($seo['robots'])      . "\" />\\n";
+}
+add_action('wp_head', 'mfox_head', 1);
+
+function mfox_footer(): void {
+    echo '<script src="' . MFOX_HUB . '/api/seo.js?site=' . MFOX_SITE . '" defer></script>' . "\\n";
+}
+add_action('wp_footer', 'mfox_footer');`;
+}
+function switchFw(id,btn){
+  document.querySelectorAll('.fw-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.fw-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('fw-'+id).classList.add('active');btn.classList.add('active');
+}
+function copyEl(id,btn){
+  navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>{
+    btn.textContent='✓ Copied';btn.classList.add('ok');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('ok');},2000);
+  });
+  toast('Copied to clipboard','ok');
 }
 
-// ─── ACTIONS ──────────────────────────────────────────────────────────────────
-async function forceUpdate() {
-    document.getElementById('force-btn').textContent = '⏳ Updating...';
-    await fetch('/api/dashboard?action=force-update&siteId='+curSite, {method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body:'{}'});
-    document.getElementById('force-btn').textContent = '⚡ Update';
-    loadSite(curSite, 7);
-    toast('Keywords updated!');
-}
-async function doForceAll() {
-    var r = await fetch('/api/cron?action=update&secret='+(prompt('Enter cron secret:')||''), {credentials:'include'});
-    var d = await r.json();
-    toast('Updated ' + (d.updated||0) + ' pages');
-    loadDashboard();
-}
-async function saveSettings(e) {
-    e.preventDefault();
-    await fetch('/api/dashboard?action=update-settings&siteId='+curSite, {
-        method:'POST', credentials:'include', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ name: document.getElementById('set-name').value, domain: document.getElementById('set-domain').value, category: document.getElementById('set-category').value })
-    });
-    toast('Settings saved!');
-    loadSite(curSite, 7);
-}
-async function deleteSite() {
-    if (!confirm('Delete this site? Cannot be undone.')) return;
-    await fetch('/api/dashboard?action=delete-site&siteId='+curSite, {method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body:'{}'});
-    showDashboard();
-    toast('Site deleted');
-}
-function showNewSiteModal() { document.getElementById('new-site-modal').classList.add('open'); }
-function closeModal()       { document.getElementById('new-site-modal').classList.remove('open'); }
-async function createSite() {
-    var name = document.getElementById('ns-name').value.trim();
-    var domain = document.getElementById('ns-domain').value.trim();
-    var category = document.getElementById('ns-category').value;
-    if (!name) { document.getElementById('ns-err').style.display='block'; document.getElementById('ns-err').textContent='Name required'; return; }
-    var r = await fetch('/api/dashboard?action=create-site', {method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name, domain, category})});
-    var d = await r.json();
-    if (d.error) { document.getElementById('ns-err').style.display='block'; document.getElementById('ns-err').textContent=d.error; return; }
-    closeModal();
-    showSite(d.siteId);
-    toast('Site created!');
+// ─── HISTORY ───────────────────────────────────────────────────────────────────
+function buildHistory(logs){
+  document.getElementById('kw-history').innerHTML=logs.map(l=>
+    '<div class="log-row"><div class="log-top"><span class="log-page">/'+(l.page||'home')+'</span><span class="log-src src-'+(l.source||'fallback')+'">'+(l.source||'fallback')+'</span></div>'+
+    '<div class="log-kw">'+(l.keywords||'').substring(0,140)+'…</div>'+
+    '<div class="log-time">'+new Date(l.date).toLocaleString('en-IN')+'</div></div>'
+  ).join('')||'<div style="color:var(--tx3);padding:12px">No history yet. Run a keyword update to begin logging.</div>';
 }
 
-// ─── TABS ─────────────────────────────────────────────────────────────────────
-function switchTab(id, btn) {
-    document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
-    document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
-    document.getElementById('tab-'+id).classList.add('active');
-    btn.classList.add('active');
+// ─── ACTIONS ───────────────────────────────────────────────────────────────────
+async function forceUpdate(){
+  var btn=document.getElementById('force-btn');
+  btn.textContent='⏳ Updating…';btn.disabled=true;
+  await fetch('/api/dashboard?action=force-update&siteId='+curSite,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:'{}'});
+  btn.textContent='⚡ Update Keywords';btn.disabled=false;
+  loadSite(curSite,curDays); toast('Keywords updated from Google News!','ok');
+}
+async function doForceAll(){
+  var sec=prompt('Enter cron secret to force-update all sites:');
+  if(!sec)return;
+  var r=await fetch('/api/cron?action=update&secret='+sec,{credentials:'include'});
+  var d=await r.json();
+  if(d.ok){toast('Updated '+( d.updated||0)+' pages across '+(d.sites||0)+' sites','ok');loadDashboard();}
+  else toast('Error: '+(d.error||'Failed'),'err');
+}
+async function saveSettings(e){
+  e.preventDefault();
+  await fetch('/api/dashboard?action=update-settings&siteId='+curSite,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:document.getElementById('set-name').value,domain:document.getElementById('set-domain').value,category:document.getElementById('set-category').value})});
+  toast('Settings saved!','ok'); loadSite(curSite,curDays);
+}
+async function deleteSite(){
+  if(!confirm('Permanently delete this site and all its data?'))return;
+  await fetch('/api/dashboard?action=delete-site&siteId='+curSite,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:'{}'});
+  showDashboard(); toast('Site deleted','inf');
+}
+function showNewSiteModal(){document.getElementById('new-site-modal').classList.add('open')}
+function closeModal(){document.getElementById('new-site-modal').classList.remove('open')}
+async function createSite(){
+  var name=document.getElementById('ns-name').value.trim();
+  var domain=document.getElementById('ns-domain').value.trim();
+  var cat=document.getElementById('ns-cat').value;
+  if(!name){var e=document.getElementById('ns-err');e.style.display='block';e.textContent='Site name is required';return;}
+  var r=await fetch('/api/dashboard?action=create-site',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,domain,category:cat})});
+  var d=await r.json();
+  if(d.error){var e=document.getElementById('ns-err');e.style.display='block';e.textContent=d.error;return;}
+  closeModal(); showSite(d.siteId); toast('Site created! All pages initialised.','ok');
 }
 
-// ─── TOAST ────────────────────────────────────────────────────────────────────
-function toast(msg) {
-    var t = document.getElementById('toast');
-    t.textContent = msg; t.style.display='block';
-    setTimeout(() => t.style.display='none', 2500);
+// ─── TABS ──────────────────────────────────────────────────────────────────────
+function switchTab(id,btn){
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');btn.classList.add('active');
 }
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
-// Check if already logged in
-fetch('/api/dashboard?action=sites', {credentials:'include'}).then(r => {
-    if (r.ok) { document.getElementById('login-screen').style.display='none'; showDashboard(); }
+// ─── TOAST ─────────────────────────────────────────────────────────────────────
+function toast(msg,type){
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast toast-'+(type||'inf');
+  t.style.display='block'; setTimeout(()=>t.style.display='none',3000);
+}
+
+// ─── INIT ──────────────────────────────────────────────────────────────────────
+fetch('/api/dashboard?action=sites',{credentials:'include'}).then(r=>{
+  if(r.ok){hide('login-screen');showDashboard();}
 });
 </script>
 </body>
