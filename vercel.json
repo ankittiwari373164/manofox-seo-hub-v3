@@ -17,7 +17,7 @@
   "crons": [
     {
       "path": "/api/cron?secret=YOUR_CRON_SECRET_HERE",
-      "schedule": "0 */3 * * *"
+      "schedule": "0 */1 * * *"
     }
   ]
 }
