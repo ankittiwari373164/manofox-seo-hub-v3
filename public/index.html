@@ -1337,8 +1337,8 @@ async function loadClientView(siteId){
   if(!document.getElementById('cl-stats')){restoreClientScreen();}
   var params=new URLSearchParams(window.location.search);
   var ckey=params.get('ckey')||'';
-  var url='/api/dashboard?action=site&siteId='+siteId+'&days=30'+(ckey?'&ckey='+encodeURIComponent(ckey):'');
-  var r=await fetch(url,{credentials:'include'});
+  var url='/api/client?siteId='+encodeURIComponent(siteId)+'&days=30'+(ckey?'&ckey='+encodeURIComponent(ckey):'');
+  var r=await fetch(url);
   var d=r.ok?await r.json():null;
   var ico={education:'📚',ecommerce:'🛒',technology:'💻',healthcare:'🏥',digitalmarketing:'📣',restaurant:'🍽️',realestate:'🏠'};
   if(d){

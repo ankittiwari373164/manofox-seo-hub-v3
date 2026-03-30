@@ -7,6 +7,7 @@
     { "src": "/api/seo/(.+)",  "dest": "/api/seo/[siteId]?siteId=$1" },
     { "src": "/api/track",     "dest": "/api/track" },
     { "src": "/api/dashboard", "dest": "/api/dashboard" },
+    { "src": "/api/client",    "dest": "/api/client" },
     { "src": "/api/auth",      "dest": "/api/auth" },
     { "src": "/api/cron",      "dest": "/api/cron" },
     { "src": "/(.*)",          "dest": "/api/index" }
