@@ -661,8 +661,8 @@ pre{background:var(--bg0);border:1px solid var(--br2);border-radius:var(--r);pad
         <tbody id="cl-referrer-table"></tbody></table>
       </div>
       <div class="card">
-        <div class="card-hdr">Active SEO Keywords</div>
-        <div id="cl-keywords"></div>
+        <div class="card-hdr">Top Pages</div>
+        <table><thead><tr><th>Page</th><th class="num">Visits</th></tr></thead><tbody id="cl-page-table"></tbody></table>
       </div>
     </div>
     <div class="client-powered">SEO analytics powered by <a href="#">Manofox SEO Hub</a> · Stats refresh daily at midnight</div>
@@ -1329,7 +1329,7 @@ function restoreClientScreen(){
       '</div>'+
       '<div class="grid-2">'+
         '<div class="card"><div class="card-hdr">Top Traffic Sources</div><table><thead><tr><th>Source</th><th class="num">Visits</th><th class="num">%</th></tr></thead><tbody id="cl-referrer-table"></tbody></table></div>'+
-        '<div class="card"><div class="card-hdr">Active SEO Keywords</div><div id="cl-keywords"></div></div>'+
+        '<div class="card"><div class="card-hdr">Top Pages</div><table><thead><tr><th>Page</th><th class="num">Visits</th></tr></thead><tbody id="cl-page-table"></tbody></table></div>'+
       '</div>'+
       '<div class="client-powered">SEO analytics powered by <a href="#">Manofox SEO Hub</a> · Stats refresh daily at midnight</div>'+
     '</div>';
@@ -1374,8 +1374,7 @@ async function loadClientView(siteId,days){
     clChart2=new Chart(document.getElementById('cl-device-chart'),{type:'doughnut',data:{labels:d.deviceStats.map(function(x){return x._id||'Unknown'}),datasets:[{data:d.deviceStats.map(function(x){return x.count}),backgroundColor:['#ff4500','#4d8fff','#00d4a0','#a855f7'],borderWidth:0}]},options:{responsive:true,plugins:{legend:{labels:{color:'#9896b4',font:{size:11},boxWidth:12}}}}});
     var tot=d.referrerStats.reduce(function(a,x){return a+x.count},0)||1;
     document.getElementById('cl-referrer-table').innerHTML=d.referrerStats.slice(0,8).map(function(x){return '<tr><td>'+(x._id||'Direct')+'</td><td class="num">'+fmt(x.count)+'</td><td class="num" style="color:var(--tx3)">'+Math.round(x.count/tot*100)+'%</td></tr>'}).join('');
-    var allKws=[];d.seoPages.forEach(function(p){(p.keywords||'').split(',').map(function(k){return k.trim()}).filter(Boolean).slice(0,5).forEach(function(k){allKws.push(k)})});
-    document.getElementById('cl-keywords').innerHTML=allKws.slice(0,20).map(function(k){return '<span class="kw-chip chip-fixed" style="margin:3px">'+k+'</span>'}).join('');
+    document.getElementById('cl-page-table').innerHTML=d.pageStats.slice(0,8).map(function(x){return '<tr><td>/'+(x._id||'home')+'</td><td class="num">'+fmt(x.count)+'</td></tr>'}).join('');
   } else {
     document.getElementById('cl-stats').innerHTML='<div style="grid-column:1/-1;color:var(--tx3);padding:20px">Unable to load stats. Please check your link is valid.</div>';
   }
