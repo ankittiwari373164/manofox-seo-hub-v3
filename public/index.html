@@ -760,7 +760,7 @@ function buildInstall(site,hubUrl){
  *
  * HOW IT WORKS:
  *  1. Place this file in your website's ROOT folder
- *  2. Add  <script src="/manofox-seo.js" defer></script>  before </body>
+ *  2. Add  <script src="/manofox-seo.js" defer><\/script>  before </body>
  *  3. Your site AUTOMATICALLY appears on the Manofox Dashboard
  *  4. SEO meta tags are injected on every page visit
  *  5. Traffic, devices, referrers are tracked silently
@@ -965,7 +965,7 @@ function mfox_head(): void {
 add_action('wp_head', 'mfox_head', 1);
 
 function mfox_footer(): void {
-    echo '<script src="' . MFOX_HUB . '/api/seo.js?site=' . MFOX_SITE . '" defer></script>' . "\\n";
+    echo '<script src="' . MFOX_HUB . '/api/seo.js?site=' . MFOX_SITE . '" defer><\\/script>' . "\\n";
 }
 add_action('wp_footer', 'mfox_footer');`;
 }
