@@ -638,6 +638,11 @@ pre{background:var(--bg0);border:1px solid var(--br2);border-radius:var(--r);pad
     </div>
   </div>
   <div class="client-main">
+    <div class="time-row" style="margin-bottom:20px">
+      <button class="day-btn active" id="cl-day-7" onclick="reloadClientView(7,this)">7 days</button>
+      <button class="day-btn" id="cl-day-30" onclick="reloadClientView(30,this)">30 days</button>
+      <button class="day-btn" id="cl-day-90" onclick="reloadClientView(90,this)">90 days</button>
+    </div>
     <div class="client-stat-grid" id="cl-stats"></div>
     <div class="grid-2">
       <div class="card">
@@ -1252,7 +1257,7 @@ function copyShareLink(){
 }
 
 // ─── CLIENT VIEW ──────────────────────────────────────────────────────────────
-var clChart1=null,clChart2=null;
+var clChart1=null,clChart2=null,curClientSite=null,curClientDays=30;
 function checkClientMode(){
   var params=new URLSearchParams(window.location.search);
   var cSite=params.get('client');
@@ -1316,6 +1321,7 @@ function restoreClientScreen(){
       '</div>'+
     '</div>'+
     '<div class="client-main">'+
+      '<div class="time-row" style="margin-bottom:20px"><button class="day-btn active" id="cl-day-7" onclick="reloadClientView(7,this)">7 days</button><button class="day-btn" id="cl-day-30" onclick="reloadClientView(30,this)">30 days</button><button class="day-btn" id="cl-day-90" onclick="reloadClientView(90,this)">90 days</button></div>'+
       '<div class="client-stat-grid" id="cl-stats"></div>'+
       '<div class="grid-2">'+
         '<div class="card"><div class="card-hdr">Traffic Trend <span style="font-size:.67rem;color:var(--grn);font-weight:700">● Live Tracking</span></div><canvas id="cl-traffic-chart" height="130"></canvas></div>'+
@@ -1330,14 +1336,22 @@ function restoreClientScreen(){
   var isLight=document.body.classList.contains('light');
   document.querySelectorAll('.theme-icon').forEach(function(el){el.textContent=isLight?'🌙':'☀️';});
 }
-async function loadClientView(siteId){
+function reloadClientView(days,btn){
+  curClientDays=days;
+  document.querySelectorAll('#client-screen .day-btn').forEach(function(b){b.classList.remove('active');});
+  if(btn)btn.classList.add('active');
+  loadClientView(curClientSite,days);
+}
+async function loadClientView(siteId,days){
   hide('login-screen');hide('dashboard-screen');hide('site-screen');
   show('client-screen');
+  curClientSite=siteId;
+  days=days||curClientDays||30;
   // Rebuild client screen HTML (in case it was replaced by login view)
   if(!document.getElementById('cl-stats')){restoreClientScreen();}
   var params=new URLSearchParams(window.location.search);
   var ckey=params.get('ckey')||'';
-  var url='/api/client?siteId='+encodeURIComponent(siteId)+'&days=30'+(ckey?'&ckey='+encodeURIComponent(ckey):'');
+  var url='/api/client?siteId='+encodeURIComponent(siteId)+'&days='+days+(ckey?'&ckey='+encodeURIComponent(ckey):'');
   var r=await fetch(url);
   var d=r.ok?await r.json():null;
   var ico={education:'📚',ecommerce:'🛒',technology:'💻',healthcare:'🏥',digitalmarketing:'📣',restaurant:'🍽️',realestate:'🏠'};
@@ -1350,7 +1364,7 @@ async function loadClientView(siteId){
     var desk=d.deviceStats.find(function(x){return x._id==='Desktop'})?.count||0;
     var kwTotal=d.seoPages.reduce(function(a,p){return a+((p.keywords||'').split(',').filter(Boolean).length)},0);
     document.getElementById('cl-stats').innerHTML=
-      csc('Total Visits (30d)',fmt(d.totalVisits||0),'All pages combined')+
+      csc('Total Visits ('+days+'d)',fmt(d.totalVisits||0),'All pages combined')+
       csc('Mobile Visitors',fmt(mob),'Mobile devices')+
       csc('Desktop Visitors',fmt(desk),'Desktop sessions')+
       csc('SEO Keywords',kwTotal,'Auto-managed & live');
