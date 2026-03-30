@@ -1257,7 +1257,7 @@ function copyShareLink(){
 }
 
 // ─── CLIENT VIEW ──────────────────────────────────────────────────────────────
-var clChart1=null,clChart2=null,curClientSite=null,curClientDays=30;
+var clChart1=null,clChart2=null,curClientSite=null,curClientDays=7;
 function checkClientMode(){
   var params=new URLSearchParams(window.location.search);
   var cSite=params.get('client');
@@ -1346,7 +1346,7 @@ async function loadClientView(siteId,days){
   hide('login-screen');hide('dashboard-screen');hide('site-screen');
   show('client-screen');
   curClientSite=siteId;
-  days=days||curClientDays||30;
+  days=days||curClientDays||7;
   // Rebuild client screen HTML (in case it was replaced by login view)
   if(!document.getElementById('cl-stats')){restoreClientScreen();}
   var params=new URLSearchParams(window.location.search);
