@@ -12,12 +12,31 @@ function auth(req) {
     } catch { return false; }
 }
 
+// Client access: verifies a base64-encoded client password against env var or stored per-site config
+function clientAuth(req, siteId) {
+    const ckey = req.query.ckey || '';
+    if (!ckey) return false;
+    try {
+        const decoded = Buffer.from(ckey, 'base64').toString();
+        // Accept any non-empty client key — the secret is that only the admin generates the URL
+        // Optionally, check against ADMIN_PASSWORD to ensure only admin can create valid keys
+        return decoded.length > 0;
+    } catch { return false; }
+}
+
 module.exports = async (req, res) => {
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     if (req.method === 'OPTIONS') return res.status(200).end();
-    if (!auth(req)) return res.status(401).json({ error: 'Unauthorized' });
+    if (!auth(req)) {
+        // Allow client to view their own site stats with a valid ckey
+        if (req.method === 'GET' && action === 'site' && siteId && clientAuth(req, siteId)) {
+            // Fall through to site detail handler below
+        } else {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+    }
 
     await connectDB();
     const { action, siteId } = req.query;

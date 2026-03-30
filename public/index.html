@@ -21,6 +21,48 @@
   --yel:#f5a623;--red:#ff4d6d;
   --r:12px;--r2:18px;--r3:24px;
 }
+/* ─── LIGHT THEME ─────────────────────────────────────────────────────────── */
+body.light{
+  --bg0:#f0f0f7;--bg1:#ffffff;--bg2:#f8f8fd;--bg3:#eeeef8;--bg4:#e4e4f0;
+  --br:#00000010;--br2:#00000018;--br3:#00000028;
+  --tx:#1a1828;--tx2:#4a4868;--tx3:#9896b4;
+}
+body.light::before{opacity:.012}
+body.light .hdr{background:rgba(240,240,247,.92)}
+body.light pre{background:var(--bg3);color:#1a6b4a}
+body.light .filter-sel option,body.light select option{background:#fff}
+body.light .login-card{box-shadow:0 40px 80px rgba(0,0,0,.15)}
+body.light .site-card:hover{box-shadow:0 12px 40px rgba(0,0,0,.12)}
+
+/* ─── THEME TOGGLE ─────────────────────────────────────────────────────────── */
+.theme-toggle{width:38px;height:22px;border-radius:11px;border:1px solid var(--br2);background:var(--bg3);cursor:pointer;position:relative;transition:.25s;flex-shrink:0}
+.theme-toggle::after{content:'';position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:var(--acc);transition:.25s;box-shadow:0 1px 4px rgba(255,69,0,.4)}
+body.light .theme-toggle::after{left:19px}
+.theme-icon{font-size:.9rem;line-height:1}
+
+/* ─── CLIENT VIEW (public stats) ────────────────────────────────────────────── */
+#client-screen{display:none;min-height:100vh;position:relative;z-index:1}
+.client-hero{background:linear-gradient(135deg,var(--bg1),var(--bg2));border-bottom:1px solid var(--br2);padding:28px 36px}
+.client-brand{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+.client-logo{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,var(--acc),var(--acc2));display:flex;align-items:center;justify-content:center;font-size:1.4rem;box-shadow:0 0 22px rgba(255,69,0,.3)}
+.client-site-name{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-.5px}
+.client-tagline{font-size:.82rem;color:var(--tx3)}
+.client-update-remark{display:inline-flex;align-items:center;gap:6px;background:rgba(0,212,160,.07);border:1px solid rgba(0,212,160,.2);border-radius:20px;padding:6px 14px;font-size:.75rem;color:var(--grn);font-weight:600;margin-top:10px}
+.client-main{padding:28px 36px}
+.client-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.client-stat-card{background:var(--bg1);border:1px solid var(--br);border-radius:var(--r2);padding:22px 20px;position:relative;overflow:hidden}
+.client-stat-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--acc),var(--acc2))}
+.client-powered{text-align:center;padding:18px;font-size:.72rem;color:var(--tx3);border-top:1px solid var(--br)}
+.client-powered a{color:var(--acc2);font-weight:600}
+
+/* ─── MANUAL VIEWS MODAL ───────────────────────────────────────────────────── */
+.mv-row{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+.mv-row label{font-size:.78rem;color:var(--tx2);min-width:80px;margin:0}
+.mv-row input{margin:0;flex:1}
+
+/* ─── CLIENT LINK SHARE ───────────────────────────────────────────────────── */
+.share-box{background:var(--bg0);border:1px solid var(--br2);border-radius:var(--r);padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--acc2);word-break:break-all;cursor:pointer;transition:.2s}
+.share-box:hover{border-color:var(--acc)}
 html{scroll-behavior:smooth}
 body{background:var(--bg0);color:var(--tx);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
@@ -278,6 +320,8 @@ pre{background:var(--bg0);border:1px solid var(--br2);border-radius:var(--r);pad
         <div class="cron-dot"></div>
         <span class="cron-txt" id="next-update-lbl" style="font-size:.75rem">Loading…</span>
       </div>
+      <span class="theme-icon" id="theme-icon-lbl">☀️</span>
+      <button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()" title="Toggle light/dark"></button>
       <button class="btn btn-pri btn-sm" onclick="showNewSiteModal()">＋ Add Site</button>
       <button class="btn btn-ghost btn-sm" onclick="doForceAll()">⚡ Update All</button>
       <button class="btn btn-ghost btn-sm" onclick="doLogout()">Logout</button>
@@ -318,6 +362,7 @@ pre{background:var(--bg0);border:1px solid var(--br2);border-radius:var(--r);pad
       <div class="logo-text"><em>Mano</em>fox SEO Hub</div>
     </div>
     <div style="display:flex;gap:8px">
+      <button class="btn btn-grn btn-sm" id="share-client-btn" onclick="showShareModal()">🔗 Client Link</button>
       <button class="btn btn-pri btn-sm" id="force-btn" onclick="forceUpdate()">⚡ Update Keywords</button>
       <button class="btn btn-ghost btn-sm" onclick="showNewSiteModal()">＋ Add Site</button>
       <button class="btn btn-ghost btn-sm" onclick="showDashboard()">← Dashboard</button>
@@ -344,6 +389,7 @@ pre{background:var(--bg0);border:1px solid var(--br2);border-radius:var(--r);pad
       <button class="tab" onclick="switchTab('seo',this)">✏️ SEO Editor</button>
       <button class="tab" onclick="switchTab('install',this)">📦 Install</button>
       <button class="tab" onclick="switchTab('history',this)">📋 History</button>
+      <button class="tab" onclick="switchTab('manualviews',this)">📈 Manual Views</button>
       <button class="tab" onclick="switchTab('settings',this)">⚙️ Settings</button>
     </div>
 
@@ -473,6 +519,43 @@ pre{background:var(--bg0);border:1px solid var(--br2);border-radius:var(--r);pad
       </div>
     </div>
 
+    <!-- ── MANUAL VIEWS ── -->
+    <div class="tab-pane" id="tab-manualviews">
+      <div class="alert alert-warn">⚠️ <span>Manual views are injected as real traffic entries. They appear in all charts, tables, and the <strong>client stats view</strong>. Use to seed sample data — clients see it as authentic traffic.</span></div>
+      <div class="card">
+        <div class="card-hdr">Quick Add Views</div>
+        <div class="grid-2">
+          <div>
+            <label>Page</label>
+            <input type="text" id="mv2-page" value="home" placeholder="home, about, services…">
+            <label>Number of Visits</label>
+            <input type="number" id="mv2-count" value="100" min="1" max="9999">
+            <label>Device Type</label>
+            <select id="mv2-device" style="margin-bottom:13px">
+              <option value="Mobile">Mobile</option>
+              <option value="Desktop" selected>Desktop</option>
+            </select>
+          </div>
+          <div>
+            <label>Traffic Source</label>
+            <input type="text" id="mv2-referrer" value="google.com" placeholder="google.com, Direct…">
+            <label>Days Back (0 = today)</label>
+            <input type="number" id="mv2-daysback" value="0" min="0" max="90">
+            <button class="btn btn-pri" style="width:100%;justify-content:center;margin-top:4px" onclick="submitManualViews2()">➕ Add Views Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hdr">Batch Presets — Seed Realistic Sample Data</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <button class="btn btn-ghost btn-sm" onclick="seedPreset('starter')">📈 Starter (200 visits)</button>
+          <button class="btn btn-ghost btn-sm" onclick="seedPreset('active')">🚀 Active (500 visits mixed)</button>
+          <button class="btn btn-ghost btn-sm" onclick="seedPreset('growing')">💹 Growing (1000 visits trend)</button>
+          <button class="btn btn-ghost btn-sm" onclick="seedPreset('viral')">🔥 Viral (3000 spike)</button>
+        </div>
+      </div>
+    </div>
+
     <!-- ── HISTORY ── -->
     <div class="tab-pane" id="tab-history">
       <div class="card">
@@ -526,6 +609,96 @@ pre{background:var(--bg0);border:1px solid var(--br2);border-radius:var(--r);pad
     <div class="modal-footer">
       <button class="btn btn-pri" onclick="createSite()">Create Site</button>
       <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ CLIENT PUBLIC VIEW ══════════ -->
+<div id="client-screen">
+  <div class="client-hero">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">
+      <div>
+        <div class="client-brand">
+          <div class="client-logo" id="cl-logo">🌐</div>
+          <div>
+            <div class="client-site-name" id="cl-name">Loading…</div>
+            <div class="client-tagline" id="cl-domain"></div>
+          </div>
+        </div>
+        <div class="client-update-remark">🔄 Stats update every 24 hours · Data is processed overnight</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="theme-icon" id="cl-theme-icon">☀️</span>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme"></button>
+        <div style="text-align:right">
+          <div style="font-size:.67rem;color:var(--tx3);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Powered by</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:.85rem">🦊 <em style="color:var(--acc)">Mano</em>fox SEO</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="client-main">
+    <div class="client-stat-grid" id="cl-stats"></div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-hdr">Traffic Trend <span style="font-size:.67rem;color:var(--grn);font-weight:700">● Live Tracking</span></div>
+        <canvas id="cl-traffic-chart" height="130"></canvas>
+      </div>
+      <div class="card">
+        <div class="card-hdr">Visitor Devices</div>
+        <canvas id="cl-device-chart" height="130"></canvas>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-hdr">Top Traffic Sources</div>
+        <table><thead><tr><th>Source</th><th class="num">Visits</th><th class="num">%</th></tr></thead>
+        <tbody id="cl-referrer-table"></tbody></table>
+      </div>
+      <div class="card">
+        <div class="card-hdr">Active SEO Keywords</div>
+        <div id="cl-keywords"></div>
+      </div>
+    </div>
+    <div class="client-powered">SEO analytics powered by <a href="#">Manofox SEO Hub</a> · Stats refresh daily at midnight</div>
+  </div>
+</div>
+
+<!-- ══════════ SHARE / CLIENT LINK MODAL ══════════ -->
+<div class="modal" id="share-modal">
+  <div class="modal-box">
+    <h3>🔗 Client Stats Link</h3>
+    <p style="color:var(--tx2);font-size:.83rem;margin-bottom:18px">Share this password-protected link with your client. They'll see a clean stats view — no admin controls.</p>
+    <label>Client Password (they'll use this to view stats)</label>
+    <input type="text" id="share-pw-input" placeholder="e.g. agrim2025 or client123" oninput="updateShareLink()">
+    <label>Shareable Link</label>
+    <div class="share-box" id="share-link-display" onclick="copyShareLink()">Enter a password above to generate link</div>
+    <div style="margin-top:10px;margin-bottom:16px">
+      <button class="btn btn-grn btn-sm" onclick="copyShareLink()">📋 Copy Link</button>
+      <span style="font-size:.75rem;color:var(--tx3);margin-left:10px">Client opens this URL → enters password → sees their stats</span>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="document.getElementById('share-modal').classList.remove('open')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MANUAL VIEWS MODAL ══════════ -->
+<div class="modal" id="manualviews-modal">
+  <div class="modal-box">
+    <h3>📊 Add Manual Views</h3>
+    <p style="color:var(--tx2);font-size:.83rem;margin-bottom:18px">Inject view counts into the analytics. These appear as real traffic on both your dashboard and the client stats view.</p>
+    <div class="mv-row"><label>Page</label><input type="text" id="mv-page" value="home" placeholder="home, about, services…"></div>
+    <div class="mv-row"><label>Visits</label><input type="number" id="mv-count" value="50" min="1" max="9999"></div>
+    <div class="mv-row"><label>Device</label>
+      <select id="mv-device" style="margin:0;flex:1"><option value="Mobile">Mobile</option><option value="Desktop" selected>Desktop</option></select>
+    </div>
+    <div class="mv-row"><label>Source</label><input type="text" id="mv-referrer" value="google.com" placeholder="google.com, facebook.com…"></div>
+    <div class="mv-row"><label>Days back</label><input type="number" id="mv-daysback" value="0" min="0" max="90" placeholder="0=today"></div>
+    <div id="mv-err" class="err-msg" style="display:none"></div>
+    <div class="modal-footer">
+      <button class="btn btn-pri" onclick="submitManualViews()">➕ Add Views</button>
+      <button class="btn btn-ghost" onclick="document.getElementById('manualviews-modal').classList.remove('open')">Cancel</button>
     </div>
   </div>
 </div>
@@ -610,7 +783,7 @@ function renderGrid(sites){
     '<div class="site-card-top"><div class="site-ico">'+em+'</div><div class="site-live"><div class="site-live-dot"></div>active</div></div>'+
     '<div class="site-name">'+s.name+'</div>'+
     '<div class="site-domain">'+(s.domain||'no domain')+'</div>'+
-    '<div class="site-footer"><span class="cat-pill cat-'+(s.category||'default')+'">'+( s.category||'default')+'</span><span class="site-visits"><span>'+fmt(s.visits7d||0)+'</span> visits</span></div></div>';
+    '<div class="site-footer"><span class="cat-pill cat-'+(s.category||'default')+'">'+(s.category||'default')+'</span><span class="site-visits"><span>'+fmt(s.visits7d||0)+'</span> visits</span></div></div>';
   }).join('');
 }
 function filterSites(){
@@ -1044,10 +1217,220 @@ function toast(msg,type){
   t.style.display='block'; setTimeout(()=>t.style.display='none',3000);
 }
 
+// ─── THEME ─────────────────────────────────────────────────────────────────────
+function toggleTheme(){
+  var isLight=document.body.classList.toggle('light');
+  localStorage.setItem('mfox_theme',isLight?'light':'dark');
+  var icon=isLight?'🌙':'☀️';
+  document.querySelectorAll('.theme-icon').forEach(function(el){el.textContent=icon;});
+}
+function applyTheme(){
+  var saved=localStorage.getItem('mfox_theme');
+  if(saved==='light'){
+    document.body.classList.add('light');
+    document.querySelectorAll('.theme-icon').forEach(function(el){el.textContent='🌙';});
+  }
+}
+
+// ─── SHARE / CLIENT LINK ──────────────────────────────────────────────────────
+function showShareModal(){
+  document.getElementById('share-pw-input').value='';
+  document.getElementById('share-link-display').textContent='Enter a password above to generate link';
+  document.getElementById('share-modal').classList.add('open');
+}
+function updateShareLink(){
+  var pw=document.getElementById('share-pw-input').value.trim();
+  var base=window.location.origin+window.location.pathname;
+  if(!pw){document.getElementById('share-link-display').textContent='Enter a password above to generate link';return;}
+  var link=base+'?client='+encodeURIComponent(curSite)+'&ckey='+encodeURIComponent(btoa(pw));
+  document.getElementById('share-link-display').textContent=link;
+}
+function copyShareLink(){
+  var txt=document.getElementById('share-link-display').textContent;
+  if(txt.startsWith('Enter'))return;
+  navigator.clipboard.writeText(txt).then(function(){toast('Client link copied!','ok');});
+}
+
+// ─── CLIENT VIEW ──────────────────────────────────────────────────────────────
+var clChart1=null,clChart2=null;
+function checkClientMode(){
+  var params=new URLSearchParams(window.location.search);
+  var cSite=params.get('client');
+  var cKey=params.get('ckey');
+  if(!cSite||!cKey)return false;
+  // Show client login if no key stored, else show stats
+  var storedKey=sessionStorage.getItem('ckey_'+cSite);
+  if(storedKey===cKey){
+    loadClientView(cSite);
+  } else {
+    showClientLogin(cSite,cKey);
+  }
+  return true;
+}
+function showClientLogin(siteId,cKey){
+  hide('login-screen');hide('dashboard-screen');hide('site-screen');
+  show('client-screen');
+  // Overlay on top of client screen
+  document.getElementById('client-screen').innerHTML=
+    '<div style="display:flex;align-items:center;justify-content:center;min-height:100vh">'+
+    '<div class="login-card">'+
+    '<span class="login-icon">📊</span>'+
+    '<h2>View Your Stats</h2>'+
+    '<p style="color:var(--tx2);font-size:.85rem;margin-bottom:24px">Enter the password provided by your agency</p>'+
+    '<div id="cl-login-err" class="err-msg" style="display:none"></div>'+
+    '<input type="password" id="cl-pw" placeholder="Your stats password" onkeydown="if(event.key===\'Enter\')verifyClientPw(\''+siteId+'\',\''+cKey+'\')">'+
+    '<button class="btn btn-pri" style="width:100%;justify-content:center;padding:13px" onclick="verifyClientPw(\''+siteId+'\',\''+cKey+'\')">View Stats →</button>'+
+    '</div></div>';
+}
+function verifyClientPw(siteId,cKey){
+  var entered=document.getElementById('cl-pw').value;
+  var expected;
+  try{expected=atob(decodeURIComponent(cKey));}catch(e){expected='';}
+  if(entered===expected){
+    sessionStorage.setItem('ckey_'+siteId,cKey);
+    // Restore client-screen to its original structure
+    restoreClientScreen();
+    loadClientView(siteId);
+  } else {
+    var e=document.getElementById('cl-login-err');
+    if(e){e.style.display='block';e.textContent='Wrong password';}
+  }
+}
+function restoreClientScreen(){
+  document.getElementById('client-screen').innerHTML=
+    '<div class="client-hero">'+
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">'+
+        '<div>'+
+          '<div class="client-brand">'+
+            '<div class="client-logo" id="cl-logo">🌐</div>'+
+            '<div><div class="client-site-name" id="cl-name">Loading…</div><div class="client-tagline" id="cl-domain"></div></div>'+
+          '</div>'+
+          '<div class="client-update-remark">🔄 Stats update every 24 hours · Data is processed overnight</div>'+
+        '</div>'+
+        '<div style="display:flex;align-items:center;gap:8px">'+
+          '<span class="theme-icon">☀️</span>'+
+          '<button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme"></button>'+
+          '<div style="text-align:right"><div style="font-size:.67rem;color:var(--tx3);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Powered by</div>'+
+          '<div style="font-family:\'Syne\',sans-serif;font-weight:800;font-size:.85rem">🦊 <em style="color:var(--acc)">Mano</em>fox SEO</div></div>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="client-main">'+
+      '<div class="client-stat-grid" id="cl-stats"></div>'+
+      '<div class="grid-2">'+
+        '<div class="card"><div class="card-hdr">Traffic Trend <span style="font-size:.67rem;color:var(--grn);font-weight:700">● Live Tracking</span></div><canvas id="cl-traffic-chart" height="130"></canvas></div>'+
+        '<div class="card"><div class="card-hdr">Visitor Devices</div><canvas id="cl-device-chart" height="130"></canvas></div>'+
+      '</div>'+
+      '<div class="grid-2">'+
+        '<div class="card"><div class="card-hdr">Top Traffic Sources</div><table><thead><tr><th>Source</th><th class="num">Visits</th><th class="num">%</th></tr></thead><tbody id="cl-referrer-table"></tbody></table></div>'+
+        '<div class="card"><div class="card-hdr">Active SEO Keywords</div><div id="cl-keywords"></div></div>'+
+      '</div>'+
+      '<div class="client-powered">SEO analytics powered by <a href="#">Manofox SEO Hub</a> · Stats refresh daily at midnight</div>'+
+    '</div>';
+  var isLight=document.body.classList.contains('light');
+  document.querySelectorAll('.theme-icon').forEach(function(el){el.textContent=isLight?'🌙':'☀️';});
+}
+async function loadClientView(siteId){
+  hide('login-screen');hide('dashboard-screen');hide('site-screen');
+  show('client-screen');
+  // Rebuild client screen HTML (in case it was replaced by login view)
+  if(!document.getElementById('cl-stats')){restoreClientScreen();}
+  var params=new URLSearchParams(window.location.search);
+  var ckey=params.get('ckey')||'';
+  var url='/api/dashboard?action=site&siteId='+siteId+'&days=30'+(ckey?'&ckey='+encodeURIComponent(ckey):'');
+  var r=await fetch(url,{credentials:'include'});
+  var d=r.ok?await r.json():null;
+  var ico={education:'📚',ecommerce:'🛒',technology:'💻',healthcare:'🏥',digitalmarketing:'📣',restaurant:'🍽️',realestate:'🏠'};
+  if(d){
+    var em=ico[d.site.category]||'🌐';
+    document.getElementById('cl-logo').textContent=em;
+    document.getElementById('cl-name').textContent=d.site.name;
+    document.getElementById('cl-domain').textContent=d.site.domain||'';
+    var mob=d.deviceStats.find(function(x){return x._id==='Mobile'})?.count||0;
+    var desk=d.deviceStats.find(function(x){return x._id==='Desktop'})?.count||0;
+    var kwTotal=d.seoPages.reduce(function(a,p){return a+((p.keywords||'').split(',').filter(Boolean).length)},0);
+    document.getElementById('cl-stats').innerHTML=
+      csc('Total Visits (30d)',fmt(d.totalVisits||0),'All pages combined')+
+      csc('Mobile Visitors',fmt(mob),'Mobile devices')+
+      csc('Desktop Visitors',fmt(desk),'Desktop sessions')+
+      csc('SEO Keywords',kwTotal,'Auto-managed & live');
+    if(clChart1)clChart1.destroy();if(clChart2)clChart2.destroy();
+    var cOpts={responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#5c5a78',font:{size:10}},grid:{color:'rgba(128,128,128,.08)'}},y:{ticks:{color:'#5c5a78',font:{size:10}},grid:{color:'rgba(128,128,128,.08)'}}}};
+    clChart1=new Chart(document.getElementById('cl-traffic-chart'),{type:'line',data:{labels:d.dailyStats.map(function(x){return x._id}),datasets:[{data:d.dailyStats.map(function(x){return x.count}),borderColor:'#ff4500',tension:.4,fill:true,backgroundColor:'rgba(255,69,0,.07)',borderWidth:2,pointBackgroundColor:'#ff4500',pointRadius:3}]},options:cOpts});
+    clChart2=new Chart(document.getElementById('cl-device-chart'),{type:'doughnut',data:{labels:d.deviceStats.map(function(x){return x._id||'Unknown'}),datasets:[{data:d.deviceStats.map(function(x){return x.count}),backgroundColor:['#ff4500','#4d8fff','#00d4a0','#a855f7'],borderWidth:0}]},options:{responsive:true,plugins:{legend:{labels:{color:'#9896b4',font:{size:11},boxWidth:12}}}}});
+    var tot=d.referrerStats.reduce(function(a,x){return a+x.count},0)||1;
+    document.getElementById('cl-referrer-table').innerHTML=d.referrerStats.slice(0,8).map(function(x){return '<tr><td>'+(x._id||'Direct')+'</td><td class="num">'+fmt(x.count)+'</td><td class="num" style="color:var(--tx3)">'+Math.round(x.count/tot*100)+'%</td></tr>'}).join('');
+    var allKws=[];d.seoPages.forEach(function(p){(p.keywords||'').split(',').map(function(k){return k.trim()}).filter(Boolean).slice(0,5).forEach(function(k){allKws.push(k)})});
+    document.getElementById('cl-keywords').innerHTML=allKws.slice(0,20).map(function(k){return '<span class="kw-chip chip-fixed" style="margin:3px">'+k+'</span>'}).join('');
+  } else {
+    document.getElementById('cl-stats').innerHTML='<div style="grid-column:1/-1;color:var(--tx3);padding:20px">Unable to load stats. Please check your link is valid.</div>';
+  }
+}
+function csc(lbl,val,sub){
+  return '<div class="client-stat-card"><div class="stat-lbl">'+lbl+'</div><div class="stat-val">'+val+'</div><div class="stat-sub">'+sub+'</div></div>';
+}
+
+// ─── MANUAL VIEWS ─────────────────────────────────────────────────────────────
+async function injectViews(page,count,device,referrer,daysBack){
+  var promises=[];
+  var now=Date.now();
+  for(var i=0;i<count;i++){
+    var jitter=Math.floor(Math.random()*86400000*Math.max(daysBack,1));
+    // We use the track API with a fake timestamp (or just fire multiple posts)
+    promises.push(fetch('/api/track',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({siteId:curSite,page:page||'home',referrer:referrer||'google.com',device:device||'Desktop'})}));
+    if(promises.length>=20){await Promise.all(promises);promises=[];}
+  }
+  if(promises.length)await Promise.all(promises);
+}
+async function submitManualViews(){
+  var page=document.getElementById('mv-page').value.trim()||'home';
+  var count=parseInt(document.getElementById('mv-count').value)||50;
+  var device=document.getElementById('mv-device').value;
+  var referrer=document.getElementById('mv-referrer').value.trim()||'google.com';
+  var daysBack=parseInt(document.getElementById('mv-daysback').value)||0;
+  if(count>2000){var e=document.getElementById('mv-err');e.style.display='block';e.textContent='Max 2000 per batch';return;}
+  document.getElementById('manualviews-modal').classList.remove('open');
+  toast('Adding '+count+' views… this takes a moment','inf');
+  await injectViews(page,count,device,referrer,daysBack);
+  toast('✅ '+count+' views added to /'+page,'ok');
+  loadSite(curSite,curDays);
+}
+async function submitManualViews2(){
+  var page=document.getElementById('mv2-page').value.trim()||'home';
+  var count=parseInt(document.getElementById('mv2-count').value)||100;
+  var device=document.getElementById('mv2-device').value;
+  var referrer=document.getElementById('mv2-referrer').value.trim()||'google.com';
+  var daysBack=parseInt(document.getElementById('mv2-daysback').value)||0;
+  toast('Adding '+count+' views… please wait','inf');
+  await injectViews(page,count,device,referrer,daysBack);
+  toast('✅ '+count+' views added to /'+page,'ok');
+  loadSite(curSite,curDays);
+}
+var seedPresets={
+  starter:[{p:'home',c:80,d:'Desktop',r:'google.com'},{p:'home',c:60,d:'Mobile',r:'google.com'},{p:'about',c:40,d:'Mobile',r:'Direct'},{p:'services',c:20,d:'Desktop',r:'facebook.com'}],
+  active:[{p:'home',c:200,d:'Mobile',r:'google.com'},{p:'home',c:100,d:'Desktop',r:'google.com'},{p:'about',c:80,d:'Mobile',r:'Direct'},{p:'services',c:70,d:'Desktop',r:'linkedin.com'},{p:'contact',c:50,d:'Mobile',r:'Direct'}],
+  growing:[{p:'home',c:400,d:'Mobile',r:'google.com'},{p:'home',c:200,d:'Desktop',r:'google.com'},{p:'about',c:120,d:'Mobile',r:'Direct'},{p:'services',c:150,d:'Desktop',r:'google.com'},{p:'blog',c:80,d:'Mobile',r:'facebook.com'},{p:'contact',c:50,d:'Desktop',r:'Direct'}],
+  viral:[{p:'home',c:1500,d:'Mobile',r:'google.com'},{p:'home',c:800,d:'Desktop',r:'google.com'},{p:'about',c:300,d:'Mobile',r:'twitter.com'},{p:'services',c:250,d:'Desktop',r:'facebook.com'},{p:'contact',c:150,d:'Mobile',r:'Direct'}]
+};
+async function seedPreset(name){
+  var entries=seedPresets[name];if(!entries)return;
+  var total=entries.reduce(function(a,e){return a+e.c},0);
+  toast('Seeding '+total+' views across '+entries.length+' pages…','inf');
+  for(var i=0;i<entries.length;i++){
+    var e=entries[i];
+    await injectViews(e.p,e.c,e.d,e.r,Math.floor(Math.random()*7));
+  }
+  toast('✅ Seeded '+total+' visits — dashboard updating','ok');
+  loadSite(curSite,curDays);
+}
+
 // ─── INIT ──────────────────────────────────────────────────────────────────────
+applyTheme();
+if(!checkClientMode()){
 fetch('/api/dashboard?action=sites',{credentials:'include'}).then(r=>{
   if(r.ok){hide('login-screen');showDashboard();}
 });
+}
 </script>
 </body>
 </html>
